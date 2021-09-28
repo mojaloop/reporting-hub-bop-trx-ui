@@ -1,0 +1,38 @@
+.transfers-tracing-app {
+  @import 'vars';
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.transfers__filters {
+  margin: 10px 0;
+}
+
+/* SINGLE CONTROLS */
+.transfers__filters__filter-row {
+  display: flex;
+  align-items: center;
+}
+
+.transfers__filters__date-filter {
+  width: 300px;
+  margin: 4px;
+}
+
+.transfers__filters__date-picker {
+  width: 300px;
+  margin: 4px;
+}
+
+.transfers__filters__textfield {
+  width: 300px;
+  margin: 4px;
+}
+
+.transfers__filters__find {
+  width: 300px;
+  margin: 4px;
+}
