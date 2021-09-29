@@ -1,4 +1,4 @@
-![Build Status](https://github.com/modusintegration/reporting-hub-bop-trx-ui-internal/actions/workflows/node.js.yml/badge.svg)
+![Build Status](https://github.com/modusintegration/reporting-hub-bop-trx-ui/actions/workflows/node.js.yml/badge.svg)
 
 # Reporting Hub BizOps Transaction Tracing Microfrontend
 
