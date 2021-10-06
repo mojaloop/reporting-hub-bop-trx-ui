@@ -5,8 +5,10 @@ import buildApi, { buildEndpointBuilder, EndpointConfig } from '@modusbox/redux-
 
 const services = {
   reportingApi: {
-    baseUrl: '',
-    mock: () => true,
+    baseUrl: process.env.REACT_APP_API_BASE_URL
+      ? process.env.REACT_APP_API_BASE_URL.replace(/\/$/, '')
+      : '',
+    mock: () => process.env.REACT_APP_MOCK_API === 'true',
   },
 };
 
