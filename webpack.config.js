@@ -4,16 +4,16 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack');
 const DotenvPlugin = require('dotenv-webpack');
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 require('dotenv').config({
   path: './.env',
 });
 
-const { DEV_PORT, VERCEL_URL, PUBLIC_PATH } = process.env;
+const { DEV_PORT } = process.env;
 
 const config = {
   DEV_PORT,
-  PUBLIC_PATH: VERCEL_URL ? `https://${VERCEL_URL}/` : PUBLIC_PATH,
 };
 
 const { ModuleFederationPlugin } = webpack.container;
@@ -50,7 +50,10 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: config.PUBLIC_PATH, // Where it's going to be expected to be published for being externally loaded
+    // It automatically determines the public path from either
+    // `import.meta.url`, `document.currentScript`, `<script />`
+    // or `self.location`.
+    publicPath: 'auto',
   },
   resolve: {
     alias: {
@@ -109,6 +112,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new CopyPlugin({
+      patterns: [{ from: 'public/runtime-env.js', to: 'runtime-env.js' }],
+    }),
     new EslintWebpackPlugin({
       extensions: ['ts', 'js', 'tsx', 'jsx'],
       exclude: [`/node_modules/`],

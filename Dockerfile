@@ -1,13 +1,18 @@
-# First part, build the app
-FROM node:16-alpine as reporting-hub-bop-trx-ui-builder
-LABEL stage=reporting-hub-bop-trx-ui-builder
+FROM node:lts-alpine as builder
+WORKDIR /opt/reporting-hub-bop-trx-ui
+ENV PATH /opt/reporting-hub-bop-trx-ui/node_modules/.bin:$PATH
 
-COPY package.json .
-COPY yarn.lock .
+RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake \
+    && cd $(npm root -g)/npm \
+    && npm config set unsafe-perm true \
+    && npm install -g node-gyp
+
+COPY package.json /opt/reporting-hub-bop-trx-ui/
+COPY yarn.lock /opt/reporting-hub-bop-trx-ui/
 
 RUN yarn --frozen-lockfile
 
-COPY ./ .
+COPY ./ /opt/reporting-hub-bop-trx-ui/
 
 # Adds the package version and commit hash
 ARG REACT_APP_NAME
@@ -19,44 +24,35 @@ ENV REACT_APP_VERSION=$REACT_APP_VERSION
 ARG REACT_APP_COMMIT
 ENV REACT_APP_COMMIT=$REACT_APP_COMMIT
 
-# Public Path
-ARG PUBLIC_PATH
-ENV PUBLIC_PATH=$PUBLIC_PATH
+RUN yarn build
 
+# Second part, create a config at boostrap via entrypoint and and serve it
+FROM nginx:1.16.0-alpine
+WORKDIR /usr/share/nginx/html
+
+COPY --from=builder /opt/reporting-hub-bop-trx-ui/dist/ /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf /etc/nginx/nginx.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/start.sh /usr/share/nginx/start.sh
+
+COPY docker/entrypoint.sh /usr/share/nginx/html/entrypoint.sh
+COPY docker/loadRuntimeConfig.sh /usr/share/nginx/html/loadRuntimeConfig.sh
+
+RUN chmod +x /usr/share/nginx/html/entrypoint.sh
+RUN chmod +x /usr/share/nginx/html/loadRuntimeConfig.sh
+
+# Provide environment variables for setting endpoints dynamically
 ARG REACT_APP_API_BASE_URL
 ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 ARG REACT_APP_MOCK_API
 ENV REACT_APP_MOCK_API=$REACT_APP_MOCK_API
 
-RUN yarn build
+EXPOSE 8082
 
-# Second part, create a config at boostrap via entrypoint and and serve it
-FROM caddy/caddy:alpine
+ENTRYPOINT ["/usr/share/nginx/html/entrypoint.sh"]
 
-# JQ is used to convert from JSON string to json file in bash
-RUN apk add --no-cache jq
-
-COPY --from=0 dist/ .
-COPY docker/Caddyfile /srv/Caddyfile
-COPY docker/entrypoint.sh /entrypoint.sh
-COPY docker/createJSONConfig.sh /createJSONConfig.sh
-
-RUN chmod +x /entrypoint.sh
-RUN chmod +x /createJSONConfig.sh
-
-# Provide environment variables for setting endpoints dynamically
-ARG API_BASE_URL
-ENV API_BASE_URL=$API_BASE_URL
-
-ARG MOCK_API
-ENV MOCK_API=$MOCK_API
-
-EXPOSE 8080
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["caddy", "run", "--watch"]
+CMD ["sh", "/usr/share/nginx/start.sh"]
 # TODO: Need to add 8080 to image-scan whitelist
 #       Need to switch user away from root
 #       Investigate Feed data unavailable, cannot perform CVE scan for distro: alpine:3.14.2
