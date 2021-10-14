@@ -1,11 +1,10 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import * as types from './types';
 import * as actions from './actions';
+import { Transfer } from '../../apollo/types';
 
 const initialState: types.TransfersState = {
-  transfers: [],
   selectedTransfer: undefined,
-  transfersError: null,
   transfersFilter: {
     transferId: undefined,
     payerFspid: undefined,
@@ -16,34 +15,13 @@ const initialState: types.TransfersState = {
     payeeIdValue: undefined,
     from: undefined,
     to: undefined,
+    currency: undefined,
+    transferState: undefined,
   },
-  isTransfersPending: false,
 };
 
 export default createReducer(initialState, (builder) =>
   builder
-    .addCase(actions.requestTransfers, (state: types.TransfersState) => ({
-      ...state,
-      transfers: initialState.transfers,
-      transfersError: initialState.transfersError,
-      isTransfersPending: true,
-    }))
-    .addCase(
-      actions.setTransfers,
-      (state: types.TransfersState, action: PayloadAction<types.Transfer[]>) => ({
-        ...state,
-        transfers: action.payload,
-        isTransfersPending: false,
-      }),
-    )
-    .addCase(
-      actions.setTransfersError,
-      (state: types.TransfersState, action: PayloadAction<string>) => ({
-        ...state,
-        transfersError: action.payload,
-        isTransfersPending: false,
-      }),
-    )
     .addCase(
       actions.setTransferFinderFilter,
       (
@@ -66,8 +44,8 @@ export default createReducer(initialState, (builder) =>
       transfersFilter: initialState.transfersFilter,
     }))
     .addCase(
-      actions.setTransferDetails,
-      (state: types.TransfersState, action: PayloadAction<types.TransferDetail>) => ({
+      actions.selectTransfer,
+      (state: types.TransfersState, action: PayloadAction<Transfer>) => ({
         ...state,
         selectedTransfer: action.payload,
       }),

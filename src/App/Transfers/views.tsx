@@ -13,7 +13,10 @@ import { connect } from 'react-redux';
 import withMount from 'hocs';
 import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
-import { TransfersFilter, FilterChangeValue, Transfer, TransferDetail } from './types';
+import { useLazyQuery } from '@apollo/client';
+import { GET_TRANSFERS } from 'apollo/query';
+import { DFSP, Transfer } from 'apollo/types';
+import { TransfersFilter, FilterChangeValue } from './types';
 import * as actions from './actions';
 import * as selectors from './selectors';
 import './Transfers.scss';
@@ -22,48 +25,51 @@ import TransferDetailsModal from './TransferDetails';
 const transfersColumns = [
   {
     label: 'Transfer ID',
-    key: 'id',
+    key: 'transferId',
+  },
+  {
+    label: 'State',
+    key: 'transferState',
   },
   {
     label: 'Type',
-    key: 'type',
-  },
-  {
-    label: 'Timestamp',
-    key: 'id',
-    func: (value: string, item: Transfer) => `${item.transferTimestamp || item.quoteTimestamp}`,
-  },
-  {
-    label: 'Payer FSPID',
-    key: 'payerFspid',
-  },
-  {
-    label: 'Payee FSPID',
-    key: 'payeeFspid',
-  },
-  {
-    label: 'Amount',
-    key: 'amount',
-    func: (value: string, item: Transfer) => `${item.amount}`,
+    key: 'transactionType',
   },
   {
     label: 'Currency',
     key: 'currency',
-    func: (value: string, item: Transfer) => `${item.currency}`,
   },
   {
-    label: 'Status',
-    key: 'status',
+    label: 'Amount',
+    key: 'amount',
+    fn: (rawValue: Number) => {
+      return `${rawValue.toString()}`;
+    },
   },
   {
-    label: 'Payer Acct ID',
-    key: 'id',
-    func: (value: string, item: Transfer) => `${item.payerParty.idType} ${item.payerParty.idValue}`,
+    label: 'Payer DFSP',
+    key: 'payerDFSP',
+    fn: (rawValue: DFSP) => {
+      return `${rawValue.name}`;
+    },
   },
   {
-    label: 'Payee Acct ID',
-    key: 'id',
-    func: (value: string, item: Transfer) => `${item.payeeParty.idType} ${item.payeeParty.idValue}`,
+    label: 'Payee DFSP',
+    key: 'payeeDFSP',
+    fn: (rawValue: DFSP) => {
+      return `${rawValue.name}`;
+    },
+  },
+  {
+    label: 'Settlement Batch',
+    key: 'settlementId',
+    fn: (rawValue: Number) => {
+      return `${rawValue.toString()}`;
+    },
+  },
+  {
+    label: 'Date Submitted',
+    key: 'createdAt',
   },
 ];
 
@@ -102,6 +108,25 @@ const IDTypes = [
   },
 ];
 
+const TransferStateTypes = [
+  {
+    label: 'ABORTED',
+    value: 'ABORTED',
+  },
+  {
+    label: 'COMMITTED',
+    value: 'COMMITTED',
+  },
+  {
+    label: 'RESERVED',
+    value: 'RESERVED',
+  },
+  {
+    label: 'SETTLED',
+    value: 'SETTLED',
+  },
+];
+
 function fromDate(value: Date | undefined): string | undefined {
   if (value) {
     return value.toISOString();
@@ -111,9 +136,6 @@ function fromDate(value: Date | undefined): string | undefined {
 
 const stateProps = (state: State) => ({
   valueTransfer: selectors.getSelectedTransfer(state),
-  transfers: selectors.getTransfers(state),
-  transfersError: selectors.getTransfersError(state),
-  isTransfersPending: selectors.getIsTransfersPending(state),
   filtersModel: selectors.getTransfersFilter(state),
 });
 
@@ -126,12 +148,10 @@ const dispatchProps = (dispatch: Dispatch) => ({
 });
 
 interface ConnectorProps {
-  valueTransfer: TransferDetail | undefined;
+  valueTransfer: Transfer | undefined;
   transfers: Transfer[];
   transfersError: string | null;
-  isTransfersPending: boolean;
   filtersModel: TransfersFilter;
-  onFindTransfersClick: () => void;
   onClearFiltersClick: () => void;
   onTransferSelect: (transfer: Transfer) => void;
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
@@ -226,6 +246,23 @@ const Filters: FC<TransferFiltersProps> = ({
         />
       </div>
       <div className="transfers__filters__filter-row">
+        <TextField
+          className="transfers__filters__textfield"
+          placeholder="Currency"
+          size="small"
+          value={model?.currency}
+          onChange={(value) => onFilterChange('currency', value)}
+        />
+        <Select
+          className="transfers__filters__select"
+          size="small"
+          placeholder="Transfer State"
+          options={TransferStateTypes}
+          value={model?.transferState}
+          onChange={(value) => onFilterChange('transferState', value as string)}
+        />
+      </div>
+      <div className="transfers__filters__filter-row">
         <Button
           className="transfers__filters__find"
           size="small"
@@ -250,23 +287,32 @@ const Transfers: FC<ConnectorProps> = ({
   valueTransfer,
   transfers,
   transfersError,
-  isTransfersPending,
   filtersModel,
-  onFindTransfersClick,
   onClearFiltersClick,
   onTransferSelect,
   onFilterChange,
 }) => {
   let content = null;
-  if (transfersError) {
+  const [getTransfers, { loading, error, data }] = useLazyQuery(GET_TRANSFERS, {
+    variables: {
+      transferId: filtersModel.transferId,
+      payeeDFSPId: filtersModel.payeeFspid,
+      payerDFSPId: filtersModel.payerFspid,
+      startDate: filtersModel.from,
+      endDate: filtersModel.to,
+      currency: filtersModel.currency,
+      transferState: filtersModel.transferState,
+    },
+  });
+  if (error) {
     content = <MessageBox kind="danger">Error fetching transfers: {transfersError}</MessageBox>;
-  } else if (isTransfersPending) {
+  } else if (loading) {
     content = <Spinner center />;
   } else {
     content = (
       <Table
         columns={transfersColumns}
-        rows={transfers}
+        rows={data ? data.transfers : []}
         pageSize={20}
         paginatorSize={7}
         flexible
@@ -297,7 +343,7 @@ const Transfers: FC<ConnectorProps> = ({
         model={filtersModel}
         onFilterChange={onFilterChange}
         onClearFiltersClick={onClearFiltersClick}
-        onFindTransfersClick={onFindTransfersClick}
+        onFindTransfersClick={getTransfers}
       />
       {warning}
       {content}

@@ -1,3 +1,5 @@
+import { Transfer } from 'apollo/types';
+
 export const REQUEST_TRANSFERS = 'Transfers / Request Transfers';
 export const SET_TRANSFERS = 'Transfers / Set Transfers';
 export const SET_TRANSFERS_ERROR = 'Transfers / Set Transfers Error';
@@ -23,46 +25,11 @@ export interface TransfersFilter {
   payeeIdValue: string | undefined;
   from: string | undefined;
   to: string | undefined;
+  currency: string | undefined;
+  transferState: string | undefined;
 }
 
 export type FilterChangeValue = string | undefined;
-
-export interface Transfer {
-  id: string;
-  quoteTimestamp: string;
-  transferTimestamp: string;
-  payerFspid: string;
-  payeeFspid: string;
-  type: TransferType;
-  currency: string;
-  amount: string;
-  status: TransferStatus;
-  payerParty: TransferParty;
-  payeeParty: TransferParty;
-}
-
-export type TransferType = string;
-
-export type TransferStatus = string;
-
-export interface QuoteRequest {
-  quoteId: string;
-  [key: string]: any;
-}
-
-export interface TransferDetail {
-  transferId: string;
-  quoteRequests: QuoteRequest[];
-  quoteParties: object[];
-  quoteResponses: object[];
-  quoteErrors: object[];
-  transferPrepares: object[];
-  transferFulfilments: object[];
-  transferParticipants: object[];
-  transferStateChanges: object[];
-  unstructuredData: string[] | undefined;
-}
-
 export interface ExtensionListItem {
   key: string;
   value: string;
@@ -94,9 +61,6 @@ export interface MojaloopErrorInformation {
 }
 
 export interface TransfersState {
-  transfers: Transfer[];
-  selectedTransfer: TransferDetail | undefined;
-  transfersError: string | null;
+  selectedTransfer: Transfer | undefined;
   transfersFilter: TransfersFilter;
-  isTransfersPending: Boolean;
 }

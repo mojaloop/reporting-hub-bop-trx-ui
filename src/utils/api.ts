@@ -1,6 +1,4 @@
 import { State } from 'store';
-import transfersMock from 'App/Transfers/_mockData';
-import transferDetailsMock from 'App/Transfers/TransferDetails/_mockData';
 import buildApi, { buildEndpointBuilder, EndpointConfig } from '@modusbox/redux-utils/lib/api';
 
 let baseUrl: string;
@@ -41,13 +39,11 @@ const transfers: EndpointConfig = {
     const queryString = new URLSearchParams(sanitizedFilters).toString();
     return `/transfers?${queryString}`;
   },
-  mock: transfersMock,
 };
 
 const transferDetails: EndpointConfig = {
   service: services.reportingApi,
   url: (_: State, transferId: string) => `/transferDetails/${transferId}`,
-  mock: transferDetailsMock,
 };
 
 export default buildApi({

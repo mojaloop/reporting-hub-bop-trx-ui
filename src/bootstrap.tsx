@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { Layout } from 'components';
 import { ConnectedRouter } from 'connected-react-router';
+import { APMProvider } from 'apollo/provider';
 import configureStore, { ReduxContext } from './store';
 import App from './App';
 import { AppMenu } from './Menu';
@@ -30,4 +31,9 @@ const ConnectedApp = () => (
   </Provider>
 );
 
-ReactDOM.render(<ConnectedApp />, document.getElementById('root'));
+ReactDOM.render(
+  <APMProvider useMocks>
+    <ConnectedApp />
+  </APMProvider>,
+  document.getElementById('root'),
+);
