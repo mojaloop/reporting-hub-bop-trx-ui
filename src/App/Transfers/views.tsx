@@ -263,13 +263,6 @@ const Transfers: FC<ConnectorProps> = ({
   } else if (isTransfersPending) {
     content = <Spinner center />;
   } else {
-    /*
-          onSelect={onTransferSelect}
-          sortColumn="D"
-          sortAsc={false}
-
-        //valueTransfer && <TransferDetails />
-    */
     content = (
       <Table
         columns={transfersColumns}
