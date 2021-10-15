@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as config } from './Config';
-import transfersReducer from './Transfers/reducer';
+import { reducer as transfersReducer } from './Transfers/slice';
 
 export const reducers = {
   config,

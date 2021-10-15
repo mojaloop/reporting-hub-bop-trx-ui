@@ -32,6 +32,10 @@ export const GET_TRANSFERS = gql`
       quoteId
       payerParty
       payeeParty
+      partyLookupEvents
+      quoteEvents
+      transferEvents
+      settlementEvents
     }
   }
 `;

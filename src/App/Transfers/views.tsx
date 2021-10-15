@@ -17,10 +17,11 @@ import { useLazyQuery } from '@apollo/client';
 import { GET_TRANSFERS } from 'apollo/query';
 import { DFSP, Transfer } from 'apollo/types';
 import { TransfersFilter, FilterChangeValue } from './types';
-import * as actions from './actions';
+import { actions } from './slice';
 import * as selectors from './selectors';
 import './Transfers.scss';
 import TransferDetailsModal from './TransferDetails';
+import JsonModal from './JsonModal';
 
 const transfersColumns = [
   {
@@ -137,10 +138,10 @@ function fromDate(value: Date | undefined): string | undefined {
 const stateProps = (state: State) => ({
   valueTransfer: selectors.getSelectedTransfer(state),
   filtersModel: selectors.getTransfersFilter(state),
+  jsonObject: selectors.getSelectedJsonObject(state),
 });
 
 const dispatchProps = (dispatch: Dispatch) => ({
-  onFindTransfersClick: () => dispatch(actions.requestTransfers()),
   onClearFiltersClick: () => dispatch(actions.clearTransferFinderFilters()),
   onTransferSelect: (transfer: Transfer) => dispatch(actions.selectTransfer(transfer)),
   onFilterChange: (field: string, value: FilterChangeValue | string) =>
@@ -148,6 +149,7 @@ const dispatchProps = (dispatch: Dispatch) => ({
 });
 
 interface ConnectorProps {
+  jsonObject: Object | undefined;
   valueTransfer: Transfer | undefined;
   transfers: Transfer[];
   transfersError: string | null;
@@ -288,6 +290,7 @@ const Transfers: FC<ConnectorProps> = ({
   transfers,
   transfersError,
   filtersModel,
+  jsonObject,
   onClearFiltersClick,
   onTransferSelect,
   onFilterChange,
@@ -336,6 +339,11 @@ const Transfers: FC<ConnectorProps> = ({
     detailModal = <TransferDetailsModal />;
   }
 
+  let jsonObjectModal = null;
+  if (jsonObject) {
+    jsonObjectModal = <JsonModal />;
+  }
+
   return (
     <div className="transfers-tracing-app">
       <Heading size="3">Find Transfers</Heading>
@@ -348,6 +356,7 @@ const Transfers: FC<ConnectorProps> = ({
       {warning}
       {content}
       {detailModal}
+      {jsonObjectModal}
     </div>
   );
 };

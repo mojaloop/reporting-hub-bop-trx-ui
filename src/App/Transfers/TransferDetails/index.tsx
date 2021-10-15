@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { Modal, Tabs, Tab, TabPanel, FormField } from 'components';
+import { Modal, Tabs, Tab, TabPanel, FormField, Button } from 'components';
 import { connect } from 'react-redux';
 import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
-import * as actions from '../actions';
+import { actions } from '../slice';
 import * as selectors from '../selectors';
 import { Transfer } from '../../../apollo/types';
 
@@ -13,17 +13,23 @@ const stateProps = (state: State) => ({
 
 const dispatchProps = (dispatch: Dispatch) => ({
   onModalCloseClick: () => dispatch(actions.transferDetailsModalClose()),
+  onSetJsonObject: (json: Object) => dispatch(actions.setJsonObject(json)),
 });
 
 interface ConnectorProps {
   transferDetails: Transfer;
   onModalCloseClick: () => void;
+  onSetJsonObject: (json: Object) => void;
 }
 
-const TransferDetails: FC<ConnectorProps> = ({ transferDetails, onModalCloseClick }) => {
+const TransferDetails: FC<ConnectorProps> = ({
+  transferDetails,
+  onModalCloseClick,
+  onSetJsonObject,
+}) => {
   const TechnicalDetailsTab = (
     <TabPanel className="technicalDetailsTab">
-      <FormField.Container direction="row">
+      <FormField.Container direction="row" align="top left">
         <FormField.Container direction="column">
           <FormField disabled type="text" label="Transfer ID" value={transferDetails.transferId!} />
           <FormField
@@ -37,6 +43,34 @@ const TransferDetails: FC<ConnectorProps> = ({ transferDetails, onModalCloseClic
             type="text"
             label="Transfer State"
             value={transferDetails.transferState || ''}
+          />
+        </FormField.Container>
+
+        <FormField.Container direction="column">
+          <h3> View Message Details </h3>
+          <Button
+            size="small"
+            kind="primary"
+            label="Party Lookup Events"
+            onClick={() => onSetJsonObject(transferDetails.partyLookupEvents || {})}
+          />
+          <Button
+            size="small"
+            kind="primary"
+            label="Quote Events"
+            onClick={() => onSetJsonObject(transferDetails.quoteEvents || {})}
+          />
+          <Button
+            size="small"
+            kind="primary"
+            label="Transfer Events"
+            onClick={() => onSetJsonObject(transferDetails.transferEvents || {})}
+          />
+          <Button
+            size="small"
+            kind="primary"
+            label="Settlement Events"
+            onClick={() => onSetJsonObject(transferDetails.settlementEvents || {})}
           />
         </FormField.Container>
       </FormField.Container>
