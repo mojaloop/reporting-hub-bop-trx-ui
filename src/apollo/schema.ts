@@ -65,8 +65,8 @@ export const typeDefs = gql`
     settlementId: Int
     payerDFSP: DFSP
     payeeDFSP: DFSP
-    payerParty: DFSP
-    payeeParty: DFSP
+    payerParty: Party
+    payeeParty: Party
     partyLookupEvents: JSONObject
     quoteEvents: JSONObject
     transferEvents: JSONObject

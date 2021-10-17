@@ -86,7 +86,7 @@ export const transfersQueryMock: MockedResponse<Query> = {
   },
   result: {
     data: {
-      transfers: TransferMock.buildList(10),
+      transfers: TransferMock.buildList(100),
       dfsps: [],
       transferSummary: [],
     },
