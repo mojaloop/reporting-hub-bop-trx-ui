@@ -32,7 +32,7 @@ const ConnectedApp = () => (
 );
 
 ReactDOM.render(
-  <APMProvider useMocks>
+  <APMProvider>
     <ConnectedApp />
   </APMProvider>,
   document.getElementById('root'),

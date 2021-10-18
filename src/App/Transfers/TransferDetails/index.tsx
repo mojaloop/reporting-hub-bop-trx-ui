@@ -6,6 +6,7 @@ import { ReduxContext } from 'store';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
 import { Transfer } from '../../../apollo/types';
+import { JsonModalData, PartyType, PartyModalData } from '../types';
 
 const stateProps = (state: State) => ({
   transferDetails: selectors.getSelectedTransfer(state),
@@ -13,19 +14,22 @@ const stateProps = (state: State) => ({
 
 const dispatchProps = (dispatch: Dispatch) => ({
   onModalCloseClick: () => dispatch(actions.transferDetailsModalClose()),
-  onSetJsonObject: (json: Object) => dispatch(actions.setJsonObject(json)),
+  onsetJsonModalData: (json: JsonModalData) => dispatch(actions.setJsonModalData(json)),
+  onsetPartyModalData: (party: PartyModalData) => dispatch(actions.setPartyModalData(party)),
 });
 
 interface ConnectorProps {
   transferDetails: Transfer;
   onModalCloseClick: () => void;
-  onSetJsonObject: (json: Object) => void;
+  onsetJsonModalData: (json: JsonModalData) => void;
+  onsetPartyModalData: (party: PartyModalData) => void;
 }
 
 const TransferDetails: FC<ConnectorProps> = ({
   transferDetails,
   onModalCloseClick,
-  onSetJsonObject,
+  onsetJsonModalData,
+  onsetPartyModalData,
 }) => {
   const TechnicalDetailsTab = (
     <TabPanel className="technicalDetailsTab">
@@ -47,30 +51,77 @@ const TransferDetails: FC<ConnectorProps> = ({
         </FormField.Container>
 
         <FormField.Container direction="column">
+          <h3> Party Information </h3>
+          <FormField.Container direction="row">
+            <Button
+              className="partyInfo"
+              size="small"
+              kind="primary"
+              label="Payer Information"
+              onClick={() => {
+                onsetPartyModalData({
+                  type: PartyType.PAYER,
+                  party: transferDetails.payerParty || {},
+                });
+              }}
+            />
+            <Button
+              className="partyInfo"
+              size="small"
+              kind="primary"
+              label="Payee Information"
+              onClick={() => {
+                onsetPartyModalData({
+                  type: PartyType.PAYEE,
+                  party: transferDetails.payeeParty || {},
+                });
+              }}
+            />
+          </FormField.Container>
           <h3> View Message Details </h3>
           <Button
             size="small"
             kind="primary"
             label="Party Lookup Events"
-            onClick={() => onSetJsonObject(transferDetails.partyLookupEvents || {})}
+            onClick={() => {
+              onsetJsonModalData({
+                title: 'Party Lookup Events',
+                json: transferDetails.partyLookupEvents || {},
+              });
+            }}
           />
           <Button
             size="small"
             kind="primary"
             label="Quote Events"
-            onClick={() => onSetJsonObject(transferDetails.quoteEvents || {})}
+            onClick={() => {
+              onsetJsonModalData({
+                title: 'Quote Events',
+                json: transferDetails.quoteEvents || {},
+              });
+            }}
           />
           <Button
             size="small"
             kind="primary"
             label="Transfer Events"
-            onClick={() => onSetJsonObject(transferDetails.transferEvents || {})}
+            onClick={() => {
+              onsetJsonModalData({
+                title: 'Transfer Events',
+                json: transferDetails.transferEvents || {},
+              });
+            }}
           />
           <Button
             size="small"
             kind="primary"
             label="Settlement Events"
-            onClick={() => onSetJsonObject(transferDetails.settlementEvents || {})}
+            onClick={() => {
+              onsetJsonModalData({
+                title: 'Settlement Events',
+                json: transferDetails.settlementEvents || {},
+              });
+            }}
           />
         </FormField.Container>
       </FormField.Container>

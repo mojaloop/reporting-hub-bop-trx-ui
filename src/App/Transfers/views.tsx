@@ -15,13 +15,14 @@ import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
 import { useLazyQuery } from '@apollo/client';
 import { GET_TRANSFERS } from 'apollo/query';
-import { DFSP, Transfer } from 'apollo/types';
+import { DFSP, Party, Transfer } from 'apollo/types';
 import { TransfersFilter, FilterChangeValue } from './types';
 import { actions } from './slice';
 import * as selectors from './selectors';
 import './Transfers.scss';
 import TransferDetailsModal from './TransferDetails';
 import JsonModal from './JsonModal';
+import PartyModal from './PartyModal';
 
 const transfersColumns = [
   {
@@ -138,7 +139,8 @@ function fromDate(value: Date | undefined): string | undefined {
 const stateProps = (state: State) => ({
   valueTransfer: selectors.getSelectedTransfer(state),
   filtersModel: selectors.getTransfersFilter(state),
-  jsonObject: selectors.getSelectedJsonObject(state),
+  jsonObject: selectors.getSelectedJsonModalData(state),
+  partyObject: selectors.getSelectedPartyModalData(state),
 });
 
 const dispatchProps = (dispatch: Dispatch) => ({
@@ -150,6 +152,7 @@ const dispatchProps = (dispatch: Dispatch) => ({
 
 interface ConnectorProps {
   jsonObject: Object | undefined;
+  partyObject: Party | undefined;
   valueTransfer: Transfer | undefined;
   transfers: Transfer[];
   transfersError: string | null;
@@ -291,6 +294,7 @@ const Transfers: FC<ConnectorProps> = ({
   transfersError,
   filtersModel,
   jsonObject,
+  partyObject,
   onClearFiltersClick,
   onTransferSelect,
   onFilterChange,
@@ -344,6 +348,11 @@ const Transfers: FC<ConnectorProps> = ({
     jsonObjectModal = <JsonModal />;
   }
 
+  let partyObjectModal = null;
+  if (partyObject) {
+    partyObjectModal = <PartyModal />;
+  }
+
   return (
     <div className="transfers-tracing-app">
       <Heading size="3">Find Transfers</Heading>
@@ -357,6 +366,7 @@ const Transfers: FC<ConnectorProps> = ({
       {content}
       {detailModal}
       {jsonObjectModal}
+      {partyObjectModal}
     </div>
   );
 };

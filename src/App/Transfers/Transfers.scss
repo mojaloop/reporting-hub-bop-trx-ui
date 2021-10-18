@@ -7,17 +7,24 @@
   padding: 10px;
 }
 
-.basicInformationTab .rc-field {
+.basicInformationTab .rc-formfield {
   width: 300px;
+  margin: 4px;
 }
 
-.technicalDetailsTab .rc-field {
+.technicalDetailsTab .rc-formfield {
   width: 450px;
+  margin: 4px;
 }
 
 .technicalDetailsTab .rc-button {
   width: 450px;
-  margin-bottom: 10px;
+  margin: 4px;
+}
+
+.technicalDetailsTab .rc-button.partyInfo {
+  width: 220px;
+  margin: 4px;
 }
 
 .transfers__filters {

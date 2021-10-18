@@ -1,4 +1,4 @@
-import { Transfer } from 'apollo/types';
+import { Party, Transfer } from 'apollo/types';
 
 export interface TransfersFilter {
   transferId: string | undefined;
@@ -20,19 +20,18 @@ export interface ExtensionListItem {
   value: string;
 }
 
-export interface TransferParty {
-  type: string;
-  idType: string;
-  idValue: string;
-  idSubValue?: string;
-  displayName?: string;
-  firstName?: string;
-  middleName?: string;
-  lastName?: string;
-  dateOfBirth?: string;
-  merchantClassificationCode?: string;
-  fspId: string;
-  extensionList?: ExtensionListItem[];
+export enum PartyType {
+  PAYER = 'Payer',
+  PAYEE = 'Payee',
+}
+export interface PartyModalData {
+  type: PartyType;
+  party: Party;
+}
+
+export interface JsonModalData {
+  title: string;
+  json: object;
 }
 
 export interface MojaloopError {
@@ -48,5 +47,6 @@ export interface MojaloopErrorInformation {
 export interface TransfersState {
   selectedTransfer: Transfer | undefined;
   transfersFilter: TransfersFilter;
-  selectedJson: Object | undefined;
+  selectedJson: JsonModalData | undefined;
+  selectedParty: PartyModalData | undefined;
 }

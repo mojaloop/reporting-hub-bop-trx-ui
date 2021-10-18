@@ -12,9 +12,9 @@ services:
       context: .
       cache_from:
         - mojaloop/reporting-hub-bop-trx-ui
-      args:
-        - REACT_APP_API_BASE_URL=http://localhost:3009/
-        - REACT_APP_MOCK_API=true
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost:3009/
+      - REACT_APP_MOCK_API=true
     ports:
       - "8082:8082"
     networks:

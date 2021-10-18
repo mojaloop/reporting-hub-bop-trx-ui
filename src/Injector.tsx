@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { PubSub, AuthConfig } from '@modusbox/microfrontend-utils';
+import { APMProvider } from 'apollo/provider';
 import { store, ReduxContext } from './store';
 import App from './App';
 import { actions } from './App/Config';
@@ -35,9 +36,11 @@ export default function ExportApp({ authConfig, pubSub }: ExportAppProps) {
   }, 1000);
 
   return (
-    <Provider store={store} context={ReduxContext}>
-      <App />
-    </Provider>
+    <APMProvider>
+      <Provider store={store} context={ReduxContext}>
+        <App />
+      </Provider>
+    </APMProvider>
   );
 }
 

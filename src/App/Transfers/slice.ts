@@ -5,6 +5,7 @@ import * as types from './types';
 const initialState: types.TransfersState = {
   selectedTransfer: undefined,
   selectedJson: undefined,
+  selectedParty: undefined,
   transfersFilter: {
     transferId: undefined,
     payerFspid: undefined,
@@ -36,16 +37,28 @@ const slice = createSlice({
         selectedTransfer: initialState.selectedTransfer,
       };
     },
-    setJsonObject(state: types.TransfersState, action: PayloadAction<Object>) {
+    setJsonModalData(state: types.TransfersState, action: PayloadAction<types.JsonModalData>) {
       return {
         ...state,
         selectedJson: action.payload,
       };
     },
-    jsonObjectModalClose(state: types.TransfersState) {
+    jsonModalClose(state: types.TransfersState) {
       return {
         ...state,
         selectedJson: initialState.selectedJson,
+      };
+    },
+    setPartyModalData(state: types.TransfersState, action: PayloadAction<types.PartyModalData>) {
+      return {
+        ...state,
+        selectedParty: action.payload,
+      };
+    },
+    partyModalClose(state: types.TransfersState) {
+      return {
+        ...state,
+        selectedParty: initialState.selectedParty,
       };
     },
     setTransferFinderFilter(
