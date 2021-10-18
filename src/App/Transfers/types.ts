@@ -1,7 +1,6 @@
 import { Party, Transfer } from 'apollo/types';
 
 export interface TransfersFilter {
-  transferId: string | undefined;
   payerFspid: string | undefined;
   payeeFspid: string | undefined;
   payerIdType: string | undefined;

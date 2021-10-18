@@ -1,7 +1,7 @@
 import * as Factory from 'factory.ts';
 import faker from 'faker';
 import { MockedResponse } from '@apollo/client/testing';
-import { GET_TRANSFERS } from './query';
+import { GET_TRANSFERS_WITH_EVENTS } from './query';
 import { Transfer, Query, DFSP, Party, PartyIdType, TransactionType, TransferState } from './types';
 
 export const PartyMock = Factory.Sync.makeFactory<Party>({
@@ -82,7 +82,7 @@ export const TransferMock = Factory.Sync.makeFactory<Transfer>({
 
 export const transfersQueryMock: MockedResponse<Query> = {
   request: {
-    query: GET_TRANSFERS,
+    query: GET_TRANSFERS_WITH_EVENTS,
   },
   result: {
     data: {

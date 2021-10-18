@@ -14,7 +14,7 @@ import withMount from 'hocs';
 import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
 import { useLazyQuery } from '@apollo/client';
-import { GET_TRANSFERS } from 'apollo/query';
+import { GET_TRANSFERS_WITH_EVENTS } from 'apollo/query';
 import { DFSP, Party, Transfer } from 'apollo/types';
 import { TransfersFilter, FilterChangeValue } from './types';
 import { actions } from './slice';
@@ -173,14 +173,6 @@ const Filters: FC<TransferFiltersProps> = ({
       <div className="transfers__filters__filter-row">
         <TextField
           className="transfers__filters__textfield"
-          placeholder="Transfer ID"
-          size="small"
-          onChange={(value) => onFilterChange('transferId', value)}
-        />
-      </div>
-      <div className="transfers__filters__filter-row">
-        <TextField
-          className="transfers__filters__textfield"
           placeholder="Payer FSPID"
           size="small"
           value={model?.payerFspid}
@@ -300,9 +292,8 @@ const Transfers: FC<ConnectorProps> = ({
   onFilterChange,
 }) => {
   let content = null;
-  const [getTransfers, { loading, error, data }] = useLazyQuery(GET_TRANSFERS, {
+  const [getTransfers, { loading, error, data }] = useLazyQuery(GET_TRANSFERS_WITH_EVENTS, {
     variables: {
-      transferId: filtersModel.transferId,
       payeeDFSPId: filtersModel.payeeFspid,
       payerDFSPId: filtersModel.payerFspid,
       startDate: filtersModel.from,
