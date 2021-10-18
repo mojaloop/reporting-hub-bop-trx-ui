@@ -294,12 +294,16 @@ const Transfers: FC<ConnectorProps> = ({
   let content = null;
   const [getTransfers, { loading, error, data }] = useLazyQuery(GET_TRANSFERS_WITH_EVENTS, {
     variables: {
-      payeeDFSPId: filtersModel.payeeFspid,
-      payerDFSPId: filtersModel.payerFspid,
       startDate: filtersModel.from,
       endDate: filtersModel.to,
       currency: filtersModel.currency,
       transferState: filtersModel.transferState,
+      payeeDFSPId: filtersModel.payeeFspid,
+      payerDFSPId: filtersModel.payerFspid,
+      payeeIdType: filtersModel.payerIdType,
+      payerIdType: filtersModel.payerIdType,
+      payeeIdValue: filtersModel.payeeIdValue,
+      payerIdValue: filtersModel.payerIdValue,
     },
   });
   if (error) {
