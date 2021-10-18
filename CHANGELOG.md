@@ -1,4 +1,11 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
+### [1.2.1](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.2.0...v1.2.1) (2021-10-18)
+
+
+### Maintenance
+
+* config docker to run as non root ([#8](https://github.com/mojaloop/reporting-hub-bop-trx-ui/issues/8)) ([ceabd6d](https://github.com/mojaloop/reporting-hub-bop-trx-ui/commit/ceabd6d4c47f7c7da09256e179995bb43bac2f3e))
+
 ## [1.2.0](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.1.1...v1.2.0) (2021-10-12)
 
 
