@@ -14,6 +14,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const link = createHttpLink({
   uri: baseUrl,
+  credentials: 'include',
 });
 
 export const client = new ApolloClient({
