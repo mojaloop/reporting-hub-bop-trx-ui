@@ -3,16 +3,16 @@ import { gql } from '@apollo/client';
 
 export const GET_TRANSFERS_WITH_EVENTS = gql`
   query GetTransfersWithEvents(
-    $startDate: String!
-    $endDate: String!
-    $currency: String!
-    $transferState: String!
-    $payeeFSPId: String!
-    $payerFSPId: String!
-    $payeeIdType: String!
-    $payerIdType: String!
-    $payeeIdValue: String!
-    $payerIdValue: String!
+    $startDate: DateTimeFlexible!
+    $endDate: DateTimeFlexible!
+    $currency: Currency
+    $transferState: TransferState
+    $payeeFSPId: String
+    $payerFSPId: String
+    $payeeIdType: PartyIDType
+    $payerIdType: PartyIDType
+    $payeeIdValue: String
+    $payerIdValue: String
   ) {
     transfers(
       filter: {
@@ -29,17 +29,41 @@ export const GET_TRANSFERS_WITH_EVENTS = gql`
       transactionType
       currency
       amount
-      payeeDFSP
-      payerDFSP
+      payeeDFSP {
+        id
+        name
+        description
+      }
+      payerDFSP {
+        id
+        name
+        description
+      }
       settlementId
       createdAt
       quoteId
-      payerParty
-      payeeParty
-      partyLookupEvents
-      quoteEvents
-      transferEvents
-      settlementEvents
+      payerParty {
+        id
+        firstName
+        lastName
+        middleName
+        dateOfBirth
+        idType
+        idValue
+      }
+      payeeParty {
+        id
+        firstName
+        lastName
+        middleName
+        dateOfBirth
+        idType
+        idValue
+      }
+      #partyLookupEvents
+      #quoteEvents
+      #transferEvents
+      #settlementEvents
     }
   }
 `;

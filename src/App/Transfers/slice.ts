@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Transfer } from 'apollo/types';
+import moment from 'moment';
 import * as types from './types';
 
 const initialState: types.TransfersState = {
@@ -13,8 +14,8 @@ const initialState: types.TransfersState = {
     payerIdValue: undefined,
     payeeIdType: undefined,
     payeeIdValue: undefined,
-    from: undefined,
-    to: undefined,
+    from: moment().subtract(1, 'month').toString(),
+    to: moment().toString(),
     currency: undefined,
     transferState: undefined,
   },
