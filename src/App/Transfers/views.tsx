@@ -45,7 +45,7 @@ const transfersColumns = [
     label: 'Amount',
     key: 'amount',
     fn: (rawValue: Number) => {
-      return `${rawValue.toString()}`;
+      return `${rawValue ? rawValue.toString() : ''}`;
     },
   },
   {
@@ -66,7 +66,7 @@ const transfersColumns = [
     label: 'Settlement Batch',
     key: 'settlementId',
     fn: (rawValue: Number) => {
-      return `${rawValue.toString()}`;
+      return `${rawValue ? rawValue.toString() : ''}`;
     },
   },
   {
