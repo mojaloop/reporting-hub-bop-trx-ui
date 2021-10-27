@@ -155,7 +155,6 @@ interface ConnectorProps {
   partyObject: Party | undefined;
   valueTransfer: Transfer | undefined;
   transfers: Transfer[];
-  transfersError: string | null;
   filtersModel: TransfersFilter;
   onClearFiltersClick: () => void;
   onTransferSelect: (transfer: Transfer) => void;
@@ -283,7 +282,6 @@ const Filters: FC<TransferFiltersProps> = ({
 const Transfers: FC<ConnectorProps> = ({
   valueTransfer,
   transfers,
-  transfersError,
   filtersModel,
   jsonObject,
   partyObject,
@@ -306,8 +304,9 @@ const Transfers: FC<ConnectorProps> = ({
       payerIdValue: filtersModel.payerIdValue,
     },
   });
+
   if (error) {
-    content = <MessageBox kind="danger">Error fetching transfers: {transfersError}</MessageBox>;
+    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
   } else if (loading) {
     content = <Spinner center />;
   } else {

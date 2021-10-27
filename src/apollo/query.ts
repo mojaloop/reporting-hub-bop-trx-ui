@@ -60,10 +60,10 @@ export const GET_TRANSFERS_WITH_EVENTS = gql`
         idType
         idValue
       }
-      #partyLookupEvents
-      #quoteEvents
-      #transferEvents
-      #settlementEvents
+      partyLookupEvents
+      quoteEvents
+      transferEvents
+      settlementEvents
     }
   }
 `;

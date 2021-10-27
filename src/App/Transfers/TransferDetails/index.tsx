@@ -149,7 +149,7 @@ const TransferDetails: FC<ConnectorProps> = ({
             disabled
             type="text"
             label="Payee"
-            value={`${transferDetails.payeeParty?.firstName} ${transferDetails.payerParty?.lastName}`}
+            value={`${transferDetails.payeeParty?.firstName} ${transferDetails.payeeParty?.lastName}`}
           />
           <FormField
             disabled
