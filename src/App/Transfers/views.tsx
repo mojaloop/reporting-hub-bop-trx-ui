@@ -31,8 +31,8 @@ import ErrorsByPayerChart from './Charts/ErrorsByPayerChart';
 import ErrorsByErrorCodeChart from './Charts/ErrorsByErrorCodeChart';
 import TransfersByPayeeChart from './Charts/TransfersByPayeeChart';
 import TransfersByPayerChart from './Charts/TransfersByPayerChart';
-import TransferTotalSummary from './TotalOverview/TransferTotalSummary';
-import ErrorSummary from './TotalOverview/ErrorSummary';
+import ErrorSummary from './ErrorSummary';
+import TransferTotalSummary from './TransferTotalSummary';
 
 const { Panel } = Collapse;
 const transfersColumns = [
