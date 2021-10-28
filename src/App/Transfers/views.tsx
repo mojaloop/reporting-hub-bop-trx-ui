@@ -16,6 +16,8 @@ import { ReduxContext } from 'store';
 import { useLazyQuery } from '@apollo/client';
 import { GET_TRANSFERS_WITH_EVENTS } from 'apollo/query';
 import { DFSP, Party, Transfer } from 'apollo/types';
+import { Collapse, Row } from 'antd';
+import moment from 'moment';
 import { TransfersFilter, FilterChangeValue } from './types';
 import { actions } from './slice';
 import * as selectors from './selectors';
@@ -23,7 +25,16 @@ import './Transfers.scss';
 import TransferDetailsModal from './TransferDetails';
 import JsonModal from './JsonModal';
 import PartyModal from './PartyModal';
+import TransfersByCurrencyChart from './Charts/TransfersByCurrencyChart';
+import ErrorsByPayeeChart from './Charts/ErrorsByPayeeChart';
+import ErrorsByPayerChart from './Charts/ErrorsByPayerChart';
+import ErrorsByErrorCodeChart from './Charts/ErrorsByErrorCodeChart';
+import TransfersByPayeeChart from './Charts/TransfersByPayeeChart';
+import TransfersByPayerChart from './Charts/TransfersByPayerChart';
+import TransferTotalSummary from './TotalOverview/TransferTotalSummary';
+import ErrorSummary from './TotalOverview/ErrorSummary';
 
+const { Panel } = Collapse;
 const transfersColumns = [
   {
     label: 'Transfer ID',
@@ -161,6 +172,83 @@ interface ConnectorProps {
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
 }
 
+const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange }) => {
+  return (
+    <div className="transfers__filters__filter-row">
+      <Select
+        className="transfers__filters__date-filter"
+        kind="primary"
+        size="small"
+        onChange={(value) => {
+          if (value === 'today') {
+            onFilterChange('from', fromDate(moment().startOf('day').toDate()));
+            onFilterChange('to', fromDate(moment().endOf('day').toDate()));
+          }
+          if (value === '48hours') {
+            onFilterChange('from', fromDate(moment().subtract(1, 'days').toDate()));
+            onFilterChange('to', fromDate(moment().toDate()));
+          }
+          if (value === '1week') {
+            onFilterChange('from', fromDate(moment().subtract(1, 'week').toDate()));
+            onFilterChange('to', fromDate(moment().toDate()));
+          }
+          if (value === '1month') {
+            onFilterChange('from', fromDate(moment().subtract(1, 'month').toDate()));
+            onFilterChange('to', fromDate(moment().toDate()));
+          }
+          if (value === '1year') {
+            onFilterChange('from', fromDate(moment().subtract(1, 'year').toDate()));
+            onFilterChange('to', fromDate(moment().toDate()));
+          }
+        }}
+        options={[
+          {
+            label: 'Today',
+            value: 'today',
+          },
+          {
+            label: 'Past 48 Hours',
+            value: '48hours',
+          },
+          {
+            label: '1 Week',
+            value: '1week',
+          },
+          {
+            label: '1 Month',
+            value: '1month',
+          },
+          {
+            label: '1 Year',
+            value: '1year',
+          },
+        ]}
+        placeholder="Choose a value"
+      />
+      <DatePicker
+        className="transfers__filters__date-filter"
+        size="small"
+        id="filter_date_from"
+        format="yyyy-MM-dd'T'HH:mm:ss xxx"
+        value={model && model.from ? new Date(model.from).toISOString() : undefined}
+        placeholder="From"
+        onChange={(value) => onFilterChange('from', fromDate(value))}
+        withTime
+      />
+      <DatePicker
+        className="transfers__filters__date-filter"
+        size="small"
+        id="filter_date_to"
+        format="yyyy-MM-dd'T'HH:mm:ss xxx"
+        value={model && model.to ? new Date(model.to).toISOString() : undefined}
+        placeholder="To"
+        onChange={(value) => onFilterChange('to', fromDate(value))}
+        withTime
+      />
+    </div>
+  );
+};
+
 const Filters: FC<TransferFiltersProps> = ({
   model,
   onFilterChange,
@@ -217,28 +305,6 @@ const Filters: FC<TransferFiltersProps> = ({
           size="small"
           value={model?.payeeIdValue}
           onChange={(value) => onFilterChange('payeeIdValue', value)}
-        />
-      </div>
-      <div className="transfers__filters__filter-row">
-        <DatePicker
-          className="transfers__filters__date-filter"
-          size="small"
-          id="filter_date_from"
-          format="yyyy-MM-dd'T'HH:mm:ss xxx"
-          value={model && model.from ? new Date(model.from).toISOString() : undefined}
-          placeholder="From"
-          onChange={(value) => onFilterChange('from', fromDate(value))}
-          withTime
-        />
-        <DatePicker
-          className="transfers__filters__date-filter"
-          size="small"
-          id="filter_date_to"
-          format="yyyy-MM-dd'T'HH:mm:ss xxx"
-          value={model && model.to ? new Date(model.to).toISOString() : undefined}
-          placeholder="To"
-          onChange={(value) => onFilterChange('to', fromDate(value))}
-          withTime
         />
       </div>
       <div className="transfers__filters__filter-row">
@@ -348,14 +414,39 @@ const Transfers: FC<ConnectorProps> = ({
   }
 
   return (
-    <div className="transfers-tracing-app">
+    <div>
       <Heading size="3">Find Transfers</Heading>
-      <Filters
-        model={filtersModel}
-        onFilterChange={onFilterChange}
-        onClearFiltersClick={onClearFiltersClick}
-        onFindTransfersClick={getTransfers}
-      />
+      <Collapse defaultActiveKey={['1']} ghost>
+        <Panel header="Date" key={1}>
+          <DateFilters model={filtersModel} onFilterChange={onFilterChange} />
+        </Panel>
+      </Collapse>
+      <Collapse defaultActiveKey={['1']} ghost>
+        <Panel header="Overview for Date Range" key={1}>
+          <Row style={{ marginBottom: 8 }}>
+            <TransferTotalSummary />
+            <TransfersByCurrencyChart />
+            <TransfersByPayerChart />
+            <TransfersByPayeeChart />
+          </Row>
+          <Row style={{ marginBottom: 8 }}>
+            <ErrorSummary />
+            <ErrorsByErrorCodeChart />
+            <ErrorsByPayerChart />
+            <ErrorsByPayeeChart />
+          </Row>
+        </Panel>
+      </Collapse>
+      <Collapse defaultActiveKey={['1']} ghost>
+        <Panel header="Filters" key={1}>
+          <Filters
+            model={filtersModel}
+            onFilterChange={onFilterChange}
+            onClearFiltersClick={onClearFiltersClick}
+            onFindTransfersClick={getTransfers}
+          />
+        </Panel>
+      </Collapse>
       {warning}
       {content}
       {detailModal}
@@ -370,6 +461,11 @@ interface TransferFiltersProps {
   onFilterChange: (field: string, value: FilterChangeValue) => void;
   onClearFiltersClick: () => void;
   onFindTransfersClick: () => void;
+}
+
+interface DateFiltersProps {
+  model: TransfersFilter;
+  onFilterChange: (field: string, value: FilterChangeValue) => void;
 }
 
 export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(

@@ -1,12 +1,3 @@
-.transfers-tracing-app {
-  @import 'vars';
-
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
 .basicInformationTab .rc-formfield {
   width: 300px;
   margin: 4px;
@@ -29,6 +20,15 @@
 
 .transfers__filters {
   margin: 10px 0;
+}
+
+.recharts-surface {
+  margin-right: 0 !important;
+}
+
+.transfer-summary {
+  width: 150px;
+  text-align: center;
 }
 
 /* SINGLE CONTROLS */

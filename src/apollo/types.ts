@@ -144,7 +144,7 @@ export type TransferSummaryFilter = {
 export type TransferSummary = {
   __typename?: 'TransferSummary';
   count: Scalars['Int'];
-  amount: Scalars['Int'];
+  amount?: Maybe<Scalars['Int']>;
   errorCode?: Maybe<Scalars['Int']>;
   payerDFSP?: Maybe<Scalars['String']>;
   payeeDFSP?: Maybe<Scalars['String']>;

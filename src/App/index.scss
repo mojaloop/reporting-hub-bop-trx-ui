@@ -1,6 +1,11 @@
 // This section refers to the react-components override
-.app {
+.transfers-tracing-app {
   @import 'vars';
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
 }
 
 * {
