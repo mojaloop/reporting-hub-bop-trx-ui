@@ -1,6 +1,8 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloProvider, DefaultOptions } from '@apollo/client';
+import { WildcardMockLink } from 'wildcard-mock-link';
+import { act } from '@testing-library/react';
 import { client } from './client';
 import {
   transfersQueryMock,
@@ -33,22 +35,24 @@ const defaultOptions: DefaultOptions = {
   },
 };
 
+const link = new WildcardMockLink(
+  [
+    transfersQueryMock,
+    transferSummary,
+    transferSummaryByCurrencyQueryMock,
+    transferSummaryByPayeeDFSPQueryMock,
+    transferSummaryByPayerDFSPQueryMock,
+    transferSummaryErrorsByCurrencyQueryMock,
+    transferSummaryErrorsByPayeeDFSPQueryMock,
+    transferSummaryErrorsByPayerDFSPQueryMock,
+  ],
+  { addTypename: true, act },
+);
+
 export const APMProvider: React.FC<Object> = ({ children }) => {
   if (mockApi)
     return (
-      <MockedProvider
-        defaultOptions={defaultOptions}
-        mocks={[
-          transfersQueryMock,
-          transferSummaryByCurrencyQueryMock,
-          transferSummaryByPayerDFSPQueryMock,
-          transferSummaryByPayeeDFSPQueryMock,
-          transferSummaryErrorsByCurrencyQueryMock,
-          transferSummaryErrorsByPayerDFSPQueryMock,
-          transferSummaryErrorsByPayeeDFSPQueryMock,
-          transferSummary,
-        ]}
-      >
+      <MockedProvider defaultOptions={defaultOptions} link={link}>
         <>{children}</>
       </MockedProvider>
     );

@@ -11,6 +11,7 @@ export interface TransfersFilter {
   to: string | undefined;
   currency: string | undefined;
   transferState: string | undefined;
+  timeframeSelect: string;
 }
 
 export type FilterChangeValue = string | undefined;

@@ -25,12 +25,12 @@ import './Transfers.scss';
 import TransferDetailsModal from './TransferDetails';
 import JsonModal from './JsonModal';
 import PartyModal from './PartyModal';
-import TransfersByCurrencyChart from './Charts/TransfersByCurrencyChart';
-import ErrorsByPayeeChart from './Charts/ErrorsByPayeeChart';
-import ErrorsByPayerChart from './Charts/ErrorsByPayerChart';
-import ErrorsByErrorCodeChart from './Charts/ErrorsByErrorCodeChart';
-import TransfersByPayeeChart from './Charts/TransfersByPayeeChart';
-import TransfersByPayerChart from './Charts/TransfersByPayerChart';
+import TransfersByCurrencyChart from './Dashboard/TransfersByCurrencyChart';
+import ErrorsByPayeeChart from './Dashboard/ErrorsByPayeeChart';
+import ErrorsByPayerChart from './Dashboard/ErrorsByPayerChart';
+import ErrorsByErrorCodeChart from './Dashboard/ErrorsByErrorCodeChart';
+import TransfersByPayeeChart from './Dashboard/TransfersByPayeeChart';
+import TransfersByPayerChart from './Dashboard/TransfersByPayerChart';
 import ErrorSummary from './ErrorSummary';
 import TransferTotalSummary from './TransferTotalSummary';
 
@@ -172,7 +172,7 @@ interface ConnectorProps {
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
 }
 
-const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange }) => {
+const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFiltersClick }) => {
   return (
     <div className="transfers__filters__filter-row">
       <Select
@@ -201,6 +201,7 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange }) => {
             onFilterChange('to', fromDate(moment().toDate()));
           }
         }}
+        value={model.timeframeSelect}
         options={[
           {
             label: 'Today',
@@ -222,6 +223,10 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange }) => {
             label: '1 Year',
             value: '1year',
           },
+          {
+            label: 'Custom Range',
+            value: 'custom',
+          },
         ]}
         placeholder="Choose a value"
       />
@@ -232,7 +237,10 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange }) => {
         format="yyyy-MM-dd'T'HH:mm:ss xxx"
         value={model && model.from ? new Date(model.from).toISOString() : undefined}
         placeholder="From"
-        onChange={(value) => onFilterChange('from', fromDate(value))}
+        onChange={(value) => {
+          onFilterChange('from', fromDate(value));
+          onFilterChange('timeframeSelect', 'custom');
+        }}
         withTime
       />
       <DatePicker
@@ -242,19 +250,28 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange }) => {
         format="yyyy-MM-dd'T'HH:mm:ss xxx"
         value={model && model.to ? new Date(model.to).toISOString() : undefined}
         placeholder="To"
-        onChange={(value) => onFilterChange('to', fromDate(value))}
+        onChange={(value) => {
+          onFilterChange('to', fromDate(value));
+          onFilterChange('timeframeSelect', 'custom');
+        }}
         withTime
+      />
+      <Button
+        noFill
+        className="transfers__filters__date-filter"
+        size="small"
+        kind="danger"
+        label="Clear Filters"
+        onClick={() => {
+          onClearFiltersClick();
+          onFilterChange('timeframeSelect', 'today');
+        }}
       />
     </div>
   );
 };
 
-const Filters: FC<TransferFiltersProps> = ({
-  model,
-  onFilterChange,
-  onClearFiltersClick,
-  onFindTransfersClick,
-}) => {
+const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransfersClick }) => {
   return (
     <div className="transfers__filters">
       <div className="transfers__filters__filter-row">
@@ -323,22 +340,12 @@ const Filters: FC<TransferFiltersProps> = ({
           value={model?.transferState}
           onChange={(value) => onFilterChange('transferState', value as string)}
         />
-      </div>
-      <div className="transfers__filters__filter-row">
         <Button
           className="transfers__filters__find"
           size="small"
           kind="primary"
           label="Find Transfers"
           onClick={onFindTransfersClick}
-        />
-        <Button
-          noFill
-          className="transfers__filters__date-filter"
-          size="small"
-          kind="danger"
-          label="Clear Filters"
-          onClick={onClearFiltersClick}
         />
       </div>
     </div>
@@ -416,12 +423,12 @@ const Transfers: FC<ConnectorProps> = ({
   return (
     <div>
       <Heading size="3">Find Transfers</Heading>
-      <Collapse defaultActiveKey={['1']} ghost>
-        <Panel header="Date" key={1}>
-          <DateFilters model={filtersModel} onFilterChange={onFilterChange} />
-        </Panel>
-      </Collapse>
-      <Collapse defaultActiveKey={['1']} ghost>
+      <DateFilters
+        model={filtersModel}
+        onFilterChange={onFilterChange}
+        onClearFiltersClick={onClearFiltersClick}
+      />
+      <Collapse defaultActiveKey={['1']}>
         <Panel header="Overview for Date Range" key={1}>
           <Row style={{ marginBottom: 8 }}>
             <TransferTotalSummary />
@@ -437,12 +444,11 @@ const Transfers: FC<ConnectorProps> = ({
           </Row>
         </Panel>
       </Collapse>
-      <Collapse defaultActiveKey={['1']} ghost>
-        <Panel header="Filters" key={1}>
+      <Collapse defaultActiveKey={['1']}>
+        <Panel header="Transfer List Filters" key={1}>
           <Filters
             model={filtersModel}
             onFilterChange={onFilterChange}
-            onClearFiltersClick={onClearFiltersClick}
             onFindTransfersClick={getTransfers}
           />
         </Panel>
@@ -459,13 +465,13 @@ const Transfers: FC<ConnectorProps> = ({
 interface TransferFiltersProps {
   model: TransfersFilter;
   onFilterChange: (field: string, value: FilterChangeValue) => void;
-  onClearFiltersClick: () => void;
   onFindTransfersClick: () => void;
 }
 
 interface DateFiltersProps {
   model: TransfersFilter;
   onFilterChange: (field: string, value: FilterChangeValue) => void;
+  onClearFiltersClick: () => void;
 }
 
 export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(

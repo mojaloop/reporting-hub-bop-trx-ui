@@ -6,7 +6,7 @@ import { MessageBox, Spinner } from 'components';
 import { useQuery } from '@apollo/client';
 import { Statistic, Typography } from 'antd';
 import { round } from 'lodash';
-import { TransferSummary } from '../../../apollo/types';
+import { TransferSummary } from 'apollo/types';
 
 const { Title, Text } = Typography;
 
@@ -38,7 +38,12 @@ const ErrorSummary: FC<ConnectorProps> = () => {
 
     content = (
       <div className="transfer-summary">
-        <Statistic value={totalErrors} />
+        <Statistic
+          value={new Intl.NumberFormat('en-GB', {
+            notation: 'compact',
+            compactDisplay: 'short',
+          }).format(totalErrors)}
+        />
         <Title level={5}>{`${round(totalErrors / totalTransfers, 2)}%`}</Title>
         <Text type="secondary">Total Errors</Text>
       </div>

@@ -1,7 +1,6 @@
 import * as Factory from 'factory.ts';
 import faker from 'faker';
-import { MockedResponse } from '@apollo/client/testing';
-import moment from 'moment';
+import { MATCH_ANY_PARAMETERS, WildcardMockedResponse } from 'wildcard-mock-link';
 import {
   GET_TRANSFERS_WITH_EVENTS,
   GET_TRANSFER_SUMMARY_BY_CURRENCY,
@@ -12,7 +11,15 @@ import {
   GET_TRANSFER_SUMMARY_ERRORS_BY_PAYER_DFSP,
   GET_TRANSFER_SUMMARY,
 } from './query';
-import { Transfer, Query, DFSP, Party, PartyIdType, TransactionType, TransferState } from './types';
+import {
+  Transfer,
+  DFSP,
+  Party,
+  PartyIdType,
+  TransactionType,
+  TransferState,
+  TransferSummary,
+} from './types';
 
 export const PartyMock = Factory.Sync.makeFactory<Party>({
   __typename: 'Party',
@@ -90,13 +97,37 @@ export const TransferMock = Factory.Sync.makeFactory<Transfer>({
   }),
 });
 
-export const transfersQueryMock: MockedResponse<Query> = {
+export const TransferSummaryMock = Factory.Sync.makeFactory<TransferSummary>({
+  __typename: 'TransferSummary',
+  count: Factory.each(() => faker.datatype.number()),
+  payerDFSP: Factory.each(() => faker.company.companyName()),
+  payeeDFSP: Factory.each(() => faker.company.companyName()),
+  currency: Factory.each(() => faker.random.arrayElement(['USD', 'EUR', 'CNY', 'MMK', 'TZS'])),
+  errorCode: Factory.each(() => faker.datatype.number()),
+});
+
+export const TransferSummaryMockByCurrency = Factory.Sync.makeFactory<TransferSummary>({
+  __typename: 'TransferSummary',
+  count: Factory.each(() => faker.datatype.number()),
+  currency: Factory.each(() => faker.datatype.string(3)),
+});
+
+export const TransferSummaryMockByPayeeDFSP = Factory.Sync.makeFactory<TransferSummary>({
+  __typename: 'TransferSummary',
+  count: Factory.each(() => faker.datatype.number()),
+  payeeDFSP: Factory.each(() => faker.company.companyName()),
+});
+
+export const TransferSummaryMockByPayerDFSP = Factory.Sync.makeFactory<TransferSummary>({
+  __typename: 'TransferSummary',
+  count: Factory.each(() => faker.datatype.number()),
+  payerDFSP: Factory.each(() => faker.company.companyName()),
+});
+
+export const transfersQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFERS_WITH_EVENTS,
-    variables: {
-      startDate: moment().subtract(1, 'month').toString(),
-      endDate: moment().toString(),
-    },
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
@@ -105,121 +136,58 @@ export const transfersQueryMock: MockedResponse<Query> = {
       transferSummary: [],
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };
 
-export const transferSummaryByCurrencyQueryMock: MockedResponse<Query> = {
+export const transferSummaryByCurrencyQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY_BY_CURRENCY,
-    variables: {},
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
       transfers: [],
       dfsps: [],
-      transferSummary: [
-        {
-          count: 9,
-          currency: 'TZS',
-        },
-        {
-          count: 36,
-          currency: 'USD',
-        },
-        {
-          count: 5,
-          currency: 'CAD',
-        },
-        {
-          count: 56,
-          currency: 'EUR',
-        },
-        {
-          count: 4,
-          currency: 'YEN',
-        },
-        {
-          count: 2,
-          currency: 'CYN',
-        },
-      ],
+      transferSummary: TransferSummaryMockByCurrency.buildList(10),
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };
 
-export const transferSummaryByPayerDFSPQueryMock: MockedResponse<Query> = {
+export const transferSummaryByPayerDFSPQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY_BY_PAYER_DFSP,
-    variables: {},
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
       transfers: [],
       dfsps: [],
-      transferSummary: [
-        {
-          count: 6,
-          payerDFSP: 'payeefsp',
-        },
-        {
-          count: 4,
-          payerDFSP: 'payerfsp',
-        },
-        {
-          count: 8,
-          payerDFSP: 'testfsp1',
-        },
-        {
-          count: 4,
-          payerDFSP: 'testfsp2',
-        },
-        {
-          count: 23,
-          payerDFSP: 'testingtoolkitdfsp',
-        },
-      ],
+      transferSummary: TransferSummaryMockByPayerDFSP.buildList(10),
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };
 
-export const transferSummaryByPayeeDFSPQueryMock: MockedResponse<Query> = {
+export const transferSummaryByPayeeDFSPQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP,
-    variables: {},
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
       transfers: [],
       dfsps: [],
-      transferSummary: [
-        {
-          count: 3,
-          payeeDFSP: 'noresponsepayeefsp',
-        },
-        {
-          count: 24,
-          payeeDFSP: 'payeefsp',
-        },
-        {
-          count: 6,
-          payeeDFSP: 'payerfsp',
-        },
-        {
-          count: 4,
-          payeeDFSP: 'testfsp1',
-        },
-        {
-          count: 8,
-          payeeDFSP: 'testfsp2',
-        },
-      ],
+      transferSummary: TransferSummaryMockByPayeeDFSP.buildList(10),
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };
 
-export const transferSummaryErrorsByCurrencyQueryMock: MockedResponse<Query> = {
+export const transferSummaryErrorsByCurrencyQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY_ERRORS_BY_CURRENCY,
-    variables: {},
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
@@ -237,12 +205,13 @@ export const transferSummaryErrorsByCurrencyQueryMock: MockedResponse<Query> = {
       ],
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };
 
-export const transferSummaryErrorsByPayerDFSPQueryMock: MockedResponse<Query> = {
+export const transferSummaryErrorsByPayerDFSPQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY_ERRORS_BY_PAYER_DFSP,
-    variables: {},
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
@@ -282,12 +251,13 @@ export const transferSummaryErrorsByPayerDFSPQueryMock: MockedResponse<Query> = 
       ],
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };
 
-export const transferSummaryErrorsByPayeeDFSPQueryMock: MockedResponse<Query> = {
+export const transferSummaryErrorsByPayeeDFSPQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY_ERRORS_BY_PAYEE_DFSP,
-    variables: {},
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
@@ -327,12 +297,13 @@ export const transferSummaryErrorsByPayeeDFSPQueryMock: MockedResponse<Query> = 
       ],
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };
 
-export const transferSummary: MockedResponse<Query> = {
+export const transferSummary: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY,
-    variables: {},
+    variables: MATCH_ANY_PARAMETERS,
   },
   result: {
     data: {
@@ -350,4 +321,5 @@ export const transferSummary: MockedResponse<Query> = {
       ],
     },
   },
+  nMatches: Number.POSITIVE_INFINITY,
 };

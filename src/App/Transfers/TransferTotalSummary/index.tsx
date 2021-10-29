@@ -32,7 +32,12 @@ const TransferTotalSummary: FC<ConnectorProps> = () => {
 
     content = (
       <div className="transfer-summary">
-        <Statistic value={totalTransfers} />
+        <Statistic
+          value={new Intl.NumberFormat('en-GB', {
+            notation: 'compact',
+            compactDisplay: 'short',
+          }).format(totalTransfers)}
+        />
         <Text type="secondary">Total Transfers</Text>
       </div>
     );

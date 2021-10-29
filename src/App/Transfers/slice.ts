@@ -18,6 +18,7 @@ const initialState: types.TransfersState = {
     to: moment().toString(),
     currency: undefined,
     transferState: undefined,
+    timeframeSelect: 'today',
   },
 };
 

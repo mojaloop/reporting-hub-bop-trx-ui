@@ -1,4 +1,4 @@
-FROM node:lts-alpine as builder
+FROM node:14.18.1-alpine as builder
 WORKDIR /opt/reporting-hub-bop-trx-ui
 ENV PATH /opt/reporting-hub-bop-trx-ui/node_modules/.bin:$PATH
 

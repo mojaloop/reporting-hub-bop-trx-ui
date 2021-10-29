@@ -19,7 +19,7 @@ const link = createHttpLink({
 
 export const client = new ApolloClient({
   connectToDevTools: true,
-  link: ApolloLink.from([schemaLink as unknown as ApolloLink, link]),
+  link: ApolloLink.from([link, schemaLink as unknown as ApolloLink]),
   cache,
   resolvers: {},
   defaultOptions: {
