@@ -16,7 +16,7 @@ import { ReduxContext } from 'store';
 import { useLazyQuery } from '@apollo/client';
 import { GET_TRANSFERS_WITH_EVENTS } from 'apollo/query';
 import { DFSP, Party, Transfer } from 'apollo/types';
-import { Collapse, Row } from 'antd';
+import { Collapse } from 'antd';
 import moment from 'moment';
 import { TransfersFilter, FilterChangeValue } from './types';
 import { actions } from './slice';
@@ -25,14 +25,7 @@ import './Transfers.scss';
 import TransferDetailsModal from './TransferDetails';
 import JsonModal from './JsonModal';
 import PartyModal from './PartyModal';
-import TransfersByCurrencyChart from './Dashboard/TransfersByCurrencyChart';
-import ErrorsByPayeeChart from './Dashboard/ErrorsByPayeeChart';
-import ErrorsByPayerChart from './Dashboard/ErrorsByPayerChart';
-import ErrorsByErrorCodeChart from './Dashboard/ErrorsByErrorCodeChart';
-import TransfersByPayeeChart from './Dashboard/TransfersByPayeeChart';
-import TransfersByPayerChart from './Dashboard/TransfersByPayerChart';
-import ErrorSummary from './ErrorSummary';
-import TransferTotalSummary from './TransferTotalSummary';
+import Dashboard from './Dashboard';
 
 const { Panel } = Collapse;
 const transfersColumns = [
@@ -430,18 +423,7 @@ const Transfers: FC<ConnectorProps> = ({
       />
       <Collapse defaultActiveKey={['1']}>
         <Panel header="Overview for Date Range" key={1}>
-          <Row style={{ marginBottom: 8 }}>
-            <TransferTotalSummary />
-            <TransfersByCurrencyChart />
-            <TransfersByPayerChart />
-            <TransfersByPayeeChart />
-          </Row>
-          <Row style={{ marginBottom: 8 }}>
-            <ErrorSummary />
-            <ErrorsByErrorCodeChart />
-            <ErrorsByPayerChart />
-            <ErrorsByPayeeChart />
-          </Row>
+          <Dashboard />
         </Panel>
       </Collapse>
       <Collapse defaultActiveKey={['1']}>
