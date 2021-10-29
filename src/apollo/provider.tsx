@@ -2,7 +2,6 @@ import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloProvider, DefaultOptions } from '@apollo/client';
 import { WildcardMockLink } from 'wildcard-mock-link';
-import { act } from '@testing-library/react';
 import { client } from './client';
 import {
   transfersQueryMock,
@@ -46,7 +45,7 @@ const link = new WildcardMockLink(
     transferSummaryErrorsByPayeeDFSPQueryMock,
     transferSummaryErrorsByPayerDFSPQueryMock,
   ],
-  { addTypename: true, act },
+  { addTypename: true },
 );
 
 export const APMProvider: React.FC<Object> = ({ children }) => {
