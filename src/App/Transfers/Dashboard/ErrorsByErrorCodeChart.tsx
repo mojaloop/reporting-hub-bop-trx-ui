@@ -1,4 +1,3 @@
-import { GET_TRANSFER_SUMMARY_ERRORS_BY_CURRENCY } from 'apollo/query';
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { Cell, Legend, Pie, PieChart, Sector, Tooltip } from 'recharts';
@@ -7,6 +6,7 @@ import { MessageBox, Spinner } from 'components';
 import { useQuery } from '@apollo/client';
 import { TransferSummary } from 'apollo/types';
 import { truncate } from 'lodash';
+import { GET_TRANSFER_SUMMARY } from 'apollo/query';
 import * as selectors from '../selectors';
 import { TransfersFilter } from '../types';
 
@@ -53,7 +53,7 @@ const renderActiveShape = (props: any) => {
 };
 
 const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
-  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_ERRORS_BY_CURRENCY, {
+  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,
@@ -85,7 +85,7 @@ const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
       .sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
     const firstThree = summary.slice(0, 3);
     const remainingSummary = {
-      currency: 'Other',
+      errorCode: 'Other',
       count: summary.slice(3).reduce((n: number, { count }: TransferSummary) => n + count, 0),
     };
     if (remainingSummary.count > 0) {

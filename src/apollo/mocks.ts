@@ -6,9 +6,6 @@ import {
   GET_TRANSFER_SUMMARY_BY_CURRENCY,
   GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP,
   GET_TRANSFER_SUMMARY_BY_PAYER_DFSP,
-  GET_TRANSFER_SUMMARY_ERRORS_BY_PAYEE_DFSP,
-  GET_TRANSFER_SUMMARY_ERRORS_BY_CURRENCY,
-  GET_TRANSFER_SUMMARY_ERRORS_BY_PAYER_DFSP,
   GET_TRANSFER_SUMMARY,
 } from './query';
 import {
@@ -106,22 +103,31 @@ export const TransferSummaryMock = Factory.Sync.makeFactory<TransferSummary>({
   errorCode: Factory.each(() => faker.datatype.number()),
 });
 
+export const TransferSummaryMockByErrorCode = Factory.Sync.makeFactory<TransferSummary>({
+  __typename: 'TransferSummary',
+  count: Factory.each(() => faker.datatype.number()),
+  errorCode: Factory.each(() => faker.datatype.number()),
+});
+
 export const TransferSummaryMockByCurrency = Factory.Sync.makeFactory<TransferSummary>({
   __typename: 'TransferSummary',
   count: Factory.each(() => faker.datatype.number()),
   currency: Factory.each(() => faker.datatype.string(3)),
+  errorCode: Factory.each(() => faker.datatype.number()),
 });
 
 export const TransferSummaryMockByPayeeDFSP = Factory.Sync.makeFactory<TransferSummary>({
   __typename: 'TransferSummary',
   count: Factory.each(() => faker.datatype.number()),
   payeeDFSP: Factory.each(() => faker.company.companyName()),
+  errorCode: Factory.each(() => faker.datatype.number()),
 });
 
 export const TransferSummaryMockByPayerDFSP = Factory.Sync.makeFactory<TransferSummary>({
   __typename: 'TransferSummary',
   count: Factory.each(() => faker.datatype.number()),
   payerDFSP: Factory.each(() => faker.company.companyName()),
+  errorCode: Factory.each(() => faker.datatype.number()),
 });
 
 export const transfersQueryMock: WildcardMockedResponse = {
@@ -139,6 +145,27 @@ export const transfersQueryMock: WildcardMockedResponse = {
   nMatches: Number.POSITIVE_INFINITY,
 };
 
+export const transferSummary: WildcardMockedResponse = {
+  request: {
+    query: GET_TRANSFER_SUMMARY,
+    variables: MATCH_ANY_PARAMETERS,
+  },
+  result: {
+    data: {
+      transfers: [],
+      dfsps: [],
+      transferSummary: [
+        {
+          count: 1000000,
+          errorCode: null,
+        },
+        ...TransferSummaryMock.buildList(10),
+      ],
+    },
+  },
+  nMatches: Number.POSITIVE_INFINITY,
+};
+
 export const transferSummaryByCurrencyQueryMock: WildcardMockedResponse = {
   request: {
     query: GET_TRANSFER_SUMMARY_BY_CURRENCY,
@@ -148,7 +175,24 @@ export const transferSummaryByCurrencyQueryMock: WildcardMockedResponse = {
     data: {
       transfers: [],
       dfsps: [],
-      transferSummary: TransferSummaryMockByCurrency.buildList(10),
+      transferSummary: [
+        {
+          count: 1000000,
+          currency: 'USD',
+          errorCode: null,
+        },
+        {
+          count: 1000000,
+          currency: 'EUR',
+          errorCode: null,
+        },
+        {
+          count: 40000,
+          currency: 'USD',
+          errorCode: 3100,
+        },
+        ...TransferSummaryMockByCurrency.buildList(10),
+      ],
     },
   },
   nMatches: Number.POSITIVE_INFINITY,
@@ -163,7 +207,19 @@ export const transferSummaryByPayerDFSPQueryMock: WildcardMockedResponse = {
     data: {
       transfers: [],
       dfsps: [],
-      transferSummary: TransferSummaryMockByPayerDFSP.buildList(10),
+      transferSummary: [
+        {
+          count: 1000000,
+          payerDFSP: 'dfspa',
+          errorCode: null,
+        },
+        {
+          count: 1000000,
+          payerDFSP: 'dfspb',
+          errorCode: null,
+        },
+        ...TransferSummaryMockByPayerDFSP.buildList(10),
+      ],
     },
   },
   nMatches: Number.POSITIVE_INFINITY,
@@ -178,146 +234,18 @@ export const transferSummaryByPayeeDFSPQueryMock: WildcardMockedResponse = {
     data: {
       transfers: [],
       dfsps: [],
-      transferSummary: TransferSummaryMockByPayeeDFSP.buildList(10),
-    },
-  },
-  nMatches: Number.POSITIVE_INFINITY,
-};
-
-export const transferSummaryErrorsByCurrencyQueryMock: WildcardMockedResponse = {
-  request: {
-    query: GET_TRANSFER_SUMMARY_ERRORS_BY_CURRENCY,
-    variables: MATCH_ANY_PARAMETERS,
-  },
-  result: {
-    data: {
-      transfers: [],
-      dfsps: [],
       transferSummary: [
         {
-          count: 44,
+          count: 1000000,
+          payeeDFSP: 'payeea',
           errorCode: null,
         },
         {
-          count: 1,
-          errorCode: 3100,
-        },
-      ],
-    },
-  },
-  nMatches: Number.POSITIVE_INFINITY,
-};
-
-export const transferSummaryErrorsByPayerDFSPQueryMock: WildcardMockedResponse = {
-  request: {
-    query: GET_TRANSFER_SUMMARY_ERRORS_BY_PAYER_DFSP,
-    variables: MATCH_ANY_PARAMETERS,
-  },
-  result: {
-    data: {
-      transfers: [],
-      dfsps: [],
-      transferSummary: [
-        {
-          count: 6,
-          errorCode: null,
-          payerDFSP: 'payeefsp',
-        },
-        {
-          count: 4,
-          errorCode: null,
-          payerDFSP: 'payerfsp',
-        },
-        {
-          count: 8,
-          errorCode: null,
-          payerDFSP: 'testfsp1',
-        },
-        {
-          count: 4,
-          errorCode: null,
-          payerDFSP: 'testfsp2',
-        },
-        {
-          count: 22,
-          errorCode: null,
-          payerDFSP: 'testingtoolkitdfsp',
-        },
-        {
-          count: 1,
-          errorCode: 3100,
-          payerDFSP: 'testingtoolkitdfsp',
-        },
-      ],
-    },
-  },
-  nMatches: Number.POSITIVE_INFINITY,
-};
-
-export const transferSummaryErrorsByPayeeDFSPQueryMock: WildcardMockedResponse = {
-  request: {
-    query: GET_TRANSFER_SUMMARY_ERRORS_BY_PAYEE_DFSP,
-    variables: MATCH_ANY_PARAMETERS,
-  },
-  result: {
-    data: {
-      transfers: [],
-      dfsps: [],
-      transferSummary: [
-        {
-          count: 2,
-          errorCode: null,
-          payeeDFSP: 'noresponsepayeefsp',
-        },
-        {
-          count: 1,
-          errorCode: 3100,
-          payeeDFSP: 'noresponsepayeefsp',
-        },
-        {
-          count: 24,
-          errorCode: null,
-          payeeDFSP: 'payeefsp',
-        },
-        {
-          count: 6,
-          errorCode: null,
-          payeeDFSP: 'payerfsp',
-        },
-        {
-          count: 4,
-          errorCode: null,
-          payeeDFSP: 'testfsp1',
-        },
-        {
-          count: 8,
-          errorCode: null,
-          payeeDFSP: 'testfsp2',
-        },
-      ],
-    },
-  },
-  nMatches: Number.POSITIVE_INFINITY,
-};
-
-export const transferSummary: WildcardMockedResponse = {
-  request: {
-    query: GET_TRANSFER_SUMMARY,
-    variables: MATCH_ANY_PARAMETERS,
-  },
-  result: {
-    data: {
-      transfers: [],
-      dfsps: [],
-      transferSummary: [
-        {
-          count: 44,
+          count: 1000000,
+          payeeDFSP: 'payeeb',
           errorCode: null,
         },
-        {
-          count: 1,
-          errorCode: 3100,
-        },
+        ...TransferSummaryMockByPayeeDFSP.buildList(10),
       ],
     },
   },

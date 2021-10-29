@@ -27,7 +27,7 @@ const TransferTotalSummary: FC<ConnectorProps> = () => {
     content = <Spinner center />;
   } else {
     const totalTransfers = data.transferSummary.filter((obj: TransferSummary) => {
-      return obj.errorCode == null;
+      return obj.errorCode === null;
     })[0].count;
 
     content = (

@@ -82,6 +82,9 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
     content = <Spinner center />;
   } else {
     const summary = data.transferSummary
+      .filter((obj: TransferSummary) => {
+        return obj.errorCode === null;
+      })
       .slice()
       .sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
     const firstThree = summary.slice(0, 3);

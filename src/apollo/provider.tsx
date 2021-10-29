@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import { ApolloProvider, DefaultOptions } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { WildcardMockLink } from 'wildcard-mock-link';
 import { client } from './client';
 import {
@@ -9,9 +9,6 @@ import {
   transferSummaryByCurrencyQueryMock,
   transferSummaryByPayeeDFSPQueryMock,
   transferSummaryByPayerDFSPQueryMock,
-  transferSummaryErrorsByCurrencyQueryMock,
-  transferSummaryErrorsByPayeeDFSPQueryMock,
-  transferSummaryErrorsByPayerDFSPQueryMock,
 } from './mocks';
 
 let mockApi: boolean;
@@ -23,17 +20,6 @@ if (process.env.NODE_ENV === 'production') {
   mockApi = true;
 }
 
-const defaultOptions: DefaultOptions = {
-  watchQuery: {
-    fetchPolicy: 'no-cache',
-    errorPolicy: 'ignore',
-  },
-  query: {
-    fetchPolicy: 'no-cache',
-    errorPolicy: 'all',
-  },
-};
-
 const link = new WildcardMockLink(
   [
     transfersQueryMock,
@@ -41,9 +27,6 @@ const link = new WildcardMockLink(
     transferSummaryByCurrencyQueryMock,
     transferSummaryByPayeeDFSPQueryMock,
     transferSummaryByPayerDFSPQueryMock,
-    transferSummaryErrorsByCurrencyQueryMock,
-    transferSummaryErrorsByPayeeDFSPQueryMock,
-    transferSummaryErrorsByPayerDFSPQueryMock,
   ],
   { addTypename: true },
 );
@@ -51,7 +34,7 @@ const link = new WildcardMockLink(
 export const APMProvider: React.FC<Object> = ({ children }) => {
   if (mockApi)
     return (
-      <MockedProvider defaultOptions={defaultOptions} link={link}>
+      <MockedProvider link={link}>
         <>{children}</>
       </MockedProvider>
     );

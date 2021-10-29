@@ -5,7 +5,7 @@ import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { Cell, Legend, Pie, PieChart, Sector, Tooltip } from 'recharts';
 import { ReduxContext, State, Dispatch } from 'store';
-import { GET_TRANSFER_SUMMARY_ERRORS_BY_PAYEE_DFSP } from 'apollo/query';
+import { GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP } from 'apollo/query';
 import { truncate } from 'lodash';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
@@ -58,7 +58,7 @@ const renderActiveShape = (props: any) => {
 };
 
 const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
-  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_ERRORS_BY_PAYEE_DFSP, {
+  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP, {
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,

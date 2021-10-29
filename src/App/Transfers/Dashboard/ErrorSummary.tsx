@@ -44,7 +44,7 @@ const ErrorSummary: FC<ConnectorProps> = () => {
             compactDisplay: 'short',
           }).format(totalErrors)}
         />
-        <Title level={5}>{`${round(totalErrors / totalTransfers, 2)}%`}</Title>
+        <Title level={5}>{`${round((totalErrors / totalTransfers) * 100, 2)}%`}</Title>
         <Text type="secondary">Total Errors</Text>
       </div>
     );

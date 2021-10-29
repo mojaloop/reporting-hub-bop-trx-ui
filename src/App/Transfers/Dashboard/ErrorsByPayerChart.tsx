@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_TRANSFER_SUMMARY_ERRORS_BY_PAYER_DFSP } from 'apollo/query';
+import { GET_TRANSFER_SUMMARY_BY_PAYER_DFSP } from 'apollo/query';
 import { MessageBox, Spinner } from 'components';
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
@@ -58,7 +58,7 @@ const renderActiveShape = (props: any) => {
 };
 
 const ByPayerChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
-  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_ERRORS_BY_PAYER_DFSP, {
+  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYER_DFSP, {
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,
