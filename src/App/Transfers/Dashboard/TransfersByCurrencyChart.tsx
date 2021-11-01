@@ -1,18 +1,16 @@
 import { GET_TRANSFER_SUMMARY_BY_CURRENCY } from 'apollo/query';
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
-import { Cell, Legend, Pie, PieChart, Sector, Tooltip } from 'recharts';
+import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
 import { ReduxContext } from 'store';
 import { State, Dispatch } from 'store/types';
 import { MessageBox, Spinner } from 'components';
 import { useQuery } from '@apollo/client';
 import { TransferSummary } from 'apollo/types';
-import { truncate } from 'lodash';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
-
-const COLORS = ['#2D662E', '#3B883E', '#4AAA4E', '#808080'];
+import { BLUE_CHART_GRADIENT_COLORS, renderActiveShape, truncateLegend } from './utils';
 
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
@@ -27,36 +25,6 @@ interface ConnectorProps {
   filtersModel: TransfersFilter;
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
 }
-
-const truncateLegend = (value: string) => {
-  return <span>{truncate(value, { length: 8 })}</span>;
-};
-
-const renderActiveShape = (props: any) => {
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
-  return (
-    <g>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius + 6}
-        outerRadius={outerRadius + 10}
-        fill={fill}
-      />
-    </g>
-  );
-};
 
 const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_CURRENCY, {
@@ -126,8 +94,10 @@ const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) =
           onMouseLeave={onPieLeave}
         >
           {firstThree.map((_entry: any, index: number) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell
+              key={`${_entry.currency}`}
+              fill={BLUE_CHART_GRADIENT_COLORS[index % BLUE_CHART_GRADIENT_COLORS.length]}
+            />
           ))}
         </Pie>
         <Tooltip />
