@@ -356,6 +356,11 @@ const Transfers: FC<ConnectorProps> = ({
   onFilterChange,
 }) => {
   let content = null;
+  // There is this sneaky cache bug in `apollo-graphql` where the http response
+  // contains the correct data but the resulting data given by `useLazyQuery`
+  // resolves into some fields being `null`.
+  // Believe it is related to https://github.com/apollographql/apollo-client/issues/8898
+  // The solution is to set `fetchPolicy: 'no-cache'`
   const [getTransfers, { loading, error, data }] = useLazyQuery(GET_TRANSFERS_WITH_EVENTS, {
     fetchPolicy: 'no-cache',
     variables: {
@@ -384,9 +389,7 @@ const Transfers: FC<ConnectorProps> = ({
         pageSize={20}
         paginatorSize={7}
         flexible
-        onSelect={(row: Transfer) => {
-          onTransferSelect(data.transfers.find((t: Transfer) => t.transferId === row.transferId));
-        }}
+        onSelect={onTransferSelect}
       />
     );
   }

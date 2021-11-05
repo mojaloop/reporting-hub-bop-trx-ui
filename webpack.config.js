@@ -50,8 +50,8 @@ module.exports = {
     proxy: {
       '/reporting-api': {
         // For local testing update `target` to point to your
-        // locally hosted or port-forwarded `central-ledger` service
-        target: 'http://localhost:36241',
+        // locally hosted or port-forwarded `reporting-hub-bop-api-svc` service
+        target: 'http://host:port',
         pathRewrite: { '^/reporting-api': '' },
         secure: false,
       },
@@ -126,7 +126,7 @@ module.exports = {
     }),
     new EslintWebpackPlugin({
       extensions: ['ts', 'js', 'tsx', 'jsx'],
-      exclude: [`/node_modules/`],
+      exclude: ['node_modules'],
     }),
     new DotenvPlugin({
       systemvars: true,

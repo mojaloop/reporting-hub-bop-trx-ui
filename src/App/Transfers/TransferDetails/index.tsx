@@ -143,13 +143,17 @@ const TransferDetails: FC<ConnectorProps> = ({
             disabled
             type="text"
             label="Payer"
-            value={`${transferDetails.payerParty?.firstName} ${transferDetails.payerParty?.lastName}`}
+            value={`${transferDetails.payerParty?.firstName || ''} ${
+              transferDetails.payerParty?.lastName || ''
+            }`}
           />
           <FormField
             disabled
             type="text"
             label="Payee"
-            value={`${transferDetails.payeeParty?.firstName} ${transferDetails.payeeParty?.lastName}`}
+            value={`${transferDetails.payeeParty?.firstName || ''} ${
+              transferDetails.payeeParty?.lastName || ''
+            }`}
           />
           <FormField
             disabled
@@ -171,17 +175,17 @@ const TransferDetails: FC<ConnectorProps> = ({
             disabled
             type="text"
             label="Payer Details"
-            value={`${
-              transferDetails.payerParty?.idType
-            } ${transferDetails.payerParty?.id?.toString()}`}
+            value={`${transferDetails.payerParty?.idType || ''} ${
+              transferDetails.payerParty?.id?.toString() || ''
+            }`}
           />
           <FormField
             disabled
             type="text"
             label="Payee Details"
-            value={`${
-              transferDetails.payeeParty?.idType
-            } ${transferDetails.payeeParty?.id?.toString()}`}
+            value={`${transferDetails.payeeParty?.idType || ''} ${
+              transferDetails.payeeParty?.id?.toString() || ''
+            }`}
           />
         </FormField.Container>
 

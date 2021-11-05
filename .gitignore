@@ -9,7 +9,7 @@ dev/*
 styleguide
 
 ## Env files
-.env.local
+.env
 
 ## modules
 node_modules
