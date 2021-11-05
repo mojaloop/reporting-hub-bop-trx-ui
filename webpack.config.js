@@ -47,6 +47,15 @@ module.exports = {
     port: config.DEV_PORT,
     host: '0.0.0.0',
     publicPath: '/',
+    proxy: {
+      '/reporting-api': {
+        // For local testing update `target` to point to your
+        // locally hosted or port-forwarded `central-ledger` service
+        target: 'http://localhost:36241',
+        pathRewrite: { '^/reporting-api': '' },
+        secure: false,
+      },
+    },
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

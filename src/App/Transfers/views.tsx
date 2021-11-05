@@ -357,6 +357,7 @@ const Transfers: FC<ConnectorProps> = ({
 }) => {
   let content = null;
   const [getTransfers, { loading, error, data }] = useLazyQuery(GET_TRANSFERS_WITH_EVENTS, {
+    fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,
@@ -383,7 +384,9 @@ const Transfers: FC<ConnectorProps> = ({
         pageSize={20}
         paginatorSize={7}
         flexible
-        onSelect={onTransferSelect}
+        onSelect={(row: Transfer) => {
+          onTransferSelect(data.transfers.find((t: Transfer) => t.transferId === row.transferId));
+        }}
       />
     );
   }

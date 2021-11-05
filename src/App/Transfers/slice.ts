@@ -14,7 +14,7 @@ const initialState: types.TransfersState = {
     payerIdValue: undefined,
     payeeIdType: undefined,
     payeeIdValue: undefined,
-    from: moment().subtract(1, 'month').toString(),
+    from: moment().subtract(1, 'day').toString(),
     to: moment().toString(),
     currency: undefined,
     transferState: undefined,

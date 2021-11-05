@@ -1,24 +1,38 @@
 import { GET_TRANSFER_SUMMARY } from 'apollo/query';
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { ReduxContext } from 'store';
+import { Dispatch, ReduxContext, State } from 'store';
 import { MessageBox, Spinner } from 'components';
 import { useQuery } from '@apollo/client';
 import { Statistic, Typography } from 'antd';
 import { round } from 'lodash';
 import { TransferSummary } from 'apollo/types';
+import { FilterChangeValue, TransfersFilter } from '../types';
+import { actions } from '../slice';
+import * as selectors from '../selectors';
 
 const { Title, Text } = Typography;
 
-const stateProps = () => ({});
+const stateProps = (state: State) => ({
+  filtersModel: selectors.getTransfersFilter(state),
+});
 
-const dispatchProps = () => ({});
+const dispatchProps = (dispatch: Dispatch) => ({
+  onFilterChange: (field: string, value: FilterChangeValue | string) =>
+    dispatch(actions.setTransferFinderFilter({ field, value })),
+});
 
-interface ConnectorProps {}
+interface ConnectorProps {
+  filtersModel: TransfersFilter;
+  onFilterChange: (field: string, value: FilterChangeValue | string) => void;
+}
 
-const ErrorSummary: FC<ConnectorProps> = () => {
+const ErrorSummary: FC<ConnectorProps> = ({ filtersModel }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
-    variables: {},
+    variables: {
+      startDate: filtersModel.from,
+      endDate: filtersModel.to,
+    },
   });
   let content = null;
 
@@ -27,14 +41,19 @@ const ErrorSummary: FC<ConnectorProps> = () => {
   } else if (loading) {
     content = <Spinner center />;
   } else {
-    const totalErrors = data.transferSummary
+    const totalErrorCount = data.transferSummary
       .filter((obj: TransferSummary) => {
         return obj.errorCode !== null;
       })
       .reduce((n: number, { count }: TransferSummary) => n + count, 0);
+
+    let totalTransferCount = 0;
     const totalTransfers = data.transferSummary.filter((obj: TransferSummary) => {
-      return obj.errorCode == null;
-    })[0].count;
+      return obj.errorCode === null;
+    });
+    if (totalTransfers.length > 0) {
+      totalTransferCount = totalTransfers[0].count;
+    }
 
     content = (
       <div className="transfer-summary">
@@ -42,9 +61,9 @@ const ErrorSummary: FC<ConnectorProps> = () => {
           value={new Intl.NumberFormat('en-GB', {
             notation: 'compact',
             compactDisplay: 'short',
-          }).format(totalErrors)}
+          }).format(totalErrorCount)}
         />
-        <Title level={5}>{`${round((totalErrors / totalTransfers) * 100, 2)}%`}</Title>
+        <Title level={5}>{`${round((totalErrorCount / totalTransferCount) * 100, 2)}%`}</Title>
         <Text type="secondary">Total Errors</Text>
       </div>
     );

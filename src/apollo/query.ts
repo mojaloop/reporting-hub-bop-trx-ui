@@ -29,6 +29,13 @@ export const GET_TRANSFERS_WITH_EVENTS = gql`
       transactionType
       currency
       amount
+      settlementId
+      createdAt
+      quoteId
+      partyLookupEvents
+      quoteEvents
+      transferEvents
+      settlementEvents
       payeeDFSP {
         id
         name
@@ -39,9 +46,6 @@ export const GET_TRANSFERS_WITH_EVENTS = gql`
         name
         description
       }
-      settlementId
-      createdAt
-      quoteId
       payerParty {
         id
         firstName
@@ -60,10 +64,6 @@ export const GET_TRANSFERS_WITH_EVENTS = gql`
         idType
         idValue
       }
-      partyLookupEvents
-      quoteEvents
-      transferEvents
-      settlementEvents
     }
   }
 `;
