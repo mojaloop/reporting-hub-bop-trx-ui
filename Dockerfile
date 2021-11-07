@@ -3,7 +3,7 @@ WORKDIR /opt/reporting-hub-bop-trx-ui
 ENV PATH /opt/reporting-hub-bop-trx-ui/node_modules/.bin:$PATH
 
 # Install build dependencies
-RUN apk add --no-cache -t build-dependencies python git make gcc g++ libtool autoconf automake \
+RUN apk add --no-cache -t python build-dependencies git make gcc g++ libtool autoconf automake \
     && cd $(npm root -g)/npm \
     && npm config set unsafe-perm true \
     && npm install -g node-gyp
