@@ -3,7 +3,7 @@ WORKDIR /opt/reporting-hub-bop-trx-ui
 ENV PATH /opt/reporting-hub-bop-trx-ui/node_modules/.bin:$PATH
 
 # Install build dependencies
-RUN apk add --no-cache -t build-dependencies git make gcc g++ python libtool autoconf automake \
+RUN apk add --no-cache -t python build-dependencies git make gcc g++ libtool autoconf automake \
     && cd $(npm root -g)/npm \
     && npm config set unsafe-perm true \
     && npm install -g node-gyp
@@ -76,5 +76,4 @@ USER appuser
 EXPOSE 8082
 ENTRYPOINT ["/usr/share/nginx/html/entrypoint.sh"]
 CMD ["sh", "/usr/share/nginx/start.sh"]
-# TODO: Need to add 8080 to image-scan whitelist
-#       Investigate Feed data unavailable, cannot perform CVE scan for distro: alpine:3.14.2
+# TODO: Need to add 8082 to image-scan whitelist
