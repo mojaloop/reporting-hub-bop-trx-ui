@@ -11,21 +11,10 @@ The application is driven by some environment variables used at build and runtim
 | `REACT_APP_VERSION` | version extracted from package.json` | - |
 | `REACT_APP_COMMIT` | commit extracted from git history | - |
 
-### Used Locally / Static Files CDN
+### Local and Production Runtime Config Variables
 
 | Name | Description | Default | Used Locally | Used In A Deployment
 |---|---|---|---|---|
-| `REACT_APP_API_BASE_URL` | base url / path for api | /api | V | ? |
+| `REACT_APP_API_BASE_URL` | base url / path for api | /reporting-api | V | V |
 | `REACT_APP_MOCK_API` |  enables mock api locally | true | V | ? |
 | `DEV_PORT` | webpack server dev http port | 3001 | V |   |
-
-### Docker Only Environment Variables
-
-| Name | Description |
-|---|---|
-| `API_BASE_URL` | base path for api (could be a URL) |
-| `MOCK_API` | enable mocking api |
-
-#### Note About Remote URLs Variables
-
-This project is using the `REMOTE_1_URL` to dynamically load a remote. You can add as many remotes as you want or you can decide to use static know locations without relying on environment variables for the purpose.
