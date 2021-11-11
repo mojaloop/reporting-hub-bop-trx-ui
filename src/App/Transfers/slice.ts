@@ -18,7 +18,7 @@ const initialState: types.TransfersState = {
     to: moment().toString(),
     currency: undefined,
     transferState: undefined,
-    timeframeSelect: 'today',
+    timeframeSelect: '24hours',
   },
 };
 
@@ -67,7 +67,6 @@ const slice = createSlice({
       action: PayloadAction<{ field: string; value: types.FilterChangeValue }>,
     ) {
       const { field, value } = action.payload;
-
       return {
         ...state,
         transfersFilter: {

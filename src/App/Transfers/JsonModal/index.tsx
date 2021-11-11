@@ -24,7 +24,7 @@ interface ConnectorProps {
 const JsonModal: FC<ConnectorProps> = ({ jsonModalData, onModalCloseClick }) => {
   return (
     <Modal title={`${jsonModalData.title}`} onClose={onModalCloseClick}>
-      <ReactJson src={jsonModalData.json} />
+      <ReactJson src={jsonModalData.json} collapseStringsAfterLength={75} />
     </Modal>
   );
 };

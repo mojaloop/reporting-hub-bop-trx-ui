@@ -81,7 +81,7 @@ export const TransferMock = Factory.Sync.makeFactory<Transfer>({
   payerParty: Factory.each(() => PartyMock.build()),
   payeeParty: Factory.each(() => PartyMock.build()),
   quoteEvents: Factory.each(() => {
-    return JSON.parse(faker.datatype.json());
+    return JSON.parse(JSON.stringify({ data: faker.datatype.string(1000) }));
   }),
   partyLookupEvents: Factory.each(() => {
     return JSON.parse(faker.datatype.json());

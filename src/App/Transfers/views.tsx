@@ -172,13 +172,17 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
         className="transfers__filters__date-filter"
         kind="primary"
         size="small"
-        onChange={(value) => {
+        onChange={(value: string) => {
+          if (value === '24hours') {
+            onFilterChange('from', fromDate(moment().subtract(1, 'days').toDate()));
+            onFilterChange('to', fromDate(moment().toDate()));
+          }
           if (value === 'today') {
             onFilterChange('from', fromDate(moment().startOf('day').toDate()));
             onFilterChange('to', fromDate(moment().endOf('day').toDate()));
           }
           if (value === '48hours') {
-            onFilterChange('from', fromDate(moment().subtract(1, 'days').toDate()));
+            onFilterChange('from', fromDate(moment().subtract(2, 'days').toDate()));
             onFilterChange('to', fromDate(moment().toDate()));
           }
           if (value === '1week') {
@@ -193,9 +197,14 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
             onFilterChange('from', fromDate(moment().subtract(1, 'year').toDate()));
             onFilterChange('to', fromDate(moment().toDate()));
           }
+          onFilterChange('timeframeSelect', value);
         }}
         value={model.timeframeSelect}
         options={[
+          {
+            label: 'Past 24 Hours',
+            value: '24hours',
+          },
           {
             label: 'Today',
             value: 'today',
@@ -257,7 +266,6 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
         label="Clear Filters"
         onClick={() => {
           onClearFiltersClick();
-          onFilterChange('timeframeSelect', 'today');
         }}
       />
     </div>
