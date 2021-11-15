@@ -159,7 +159,7 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
         placeholder="From"
         onChange={(value) => {
           onFilterChange('from', fromDate(value));
-          onFilterChange('timeframeSelect', 'custom');
+          onFilterChange('timeframeSelect', DateRanges.Custom);
         }}
         withTime
       />
@@ -172,7 +172,7 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
         placeholder="To"
         onChange={(value) => {
           onFilterChange('to', fromDate(value));
-          onFilterChange('timeframeSelect', 'custom');
+          onFilterChange('timeframeSelect', DateRanges.Custom);
         }}
         withTime
       />
