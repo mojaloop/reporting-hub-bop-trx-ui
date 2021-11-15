@@ -23,6 +23,17 @@
   word-break: break-all;
 }
 
+.recharts-legend-wrapper ul {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+.legend-title {
+  white-space: nowrap;
+  text-decoration: underline;
+  color: grey;
+}
+
 .transfers__filters {
   margin: 10px 0;
 }

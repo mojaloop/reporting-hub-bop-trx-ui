@@ -10,7 +10,7 @@ import { TransferSummary } from 'apollo/types';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
-import { BLUE_CHART_GRADIENT_COLORS, renderActiveShape, truncateLegend } from './utils';
+import { GREEN_CHART_GRADIENT_COLORS, renderActiveShape, renderGreenLegend } from './utils';
 
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
@@ -67,15 +67,17 @@ const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) =
     }
 
     content = (
-      <PieChart width={300} height={120}>
+      <PieChart id="TransfersByCurrencyChart" width={300} height={120}>
         <Legend
+          id="TransfersByCurrencyChartLegend"
+          name="By Currency"
           layout="vertical"
           verticalAlign="middle"
           align="right"
           width={50}
           height={100}
           iconSize={0}
-          formatter={truncateLegend}
+          content={renderGreenLegend}
         />
         <Pie
           data={firstThree}
@@ -97,7 +99,7 @@ const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) =
           {firstThree.map((_entry: any, index: number) => (
             <Cell
               key={`${_entry.currency}`}
-              fill={BLUE_CHART_GRADIENT_COLORS[index % BLUE_CHART_GRADIENT_COLORS.length]}
+              fill={GREEN_CHART_GRADIENT_COLORS[index % GREEN_CHART_GRADIENT_COLORS.length]}
             />
           ))}
         </Pie>
