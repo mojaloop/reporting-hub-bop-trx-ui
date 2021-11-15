@@ -176,7 +176,7 @@ const TransferDetails: FC<ConnectorProps> = ({
             type="text"
             label="Payer Details"
             value={`${transferDetails.payerParty?.idType || ''} ${
-              transferDetails.payerParty?.id?.toString() || ''
+              transferDetails.payerParty?.idValue?.toString() || ''
             }`}
           />
           <FormField
@@ -184,7 +184,7 @@ const TransferDetails: FC<ConnectorProps> = ({
             type="text"
             label="Payee Details"
             value={`${transferDetails.payeeParty?.idType || ''} ${
-              transferDetails.payeeParty?.id?.toString() || ''
+              transferDetails.payeeParty?.idValue?.toString() || ''
             }`}
           />
         </FormField.Container>

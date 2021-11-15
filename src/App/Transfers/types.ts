@@ -1,6 +1,7 @@
 import { Party, Transfer } from 'apollo/types';
 
 export interface TransfersFilter {
+  transferId: string | undefined;
   payerFSPId: string | undefined;
   payeeFSPId: string | undefined;
   payerIdType: string | undefined;
@@ -24,6 +25,17 @@ export enum PartyType {
   PAYER = 'Payer',
   PAYEE = 'Payee',
 }
+
+export enum DateRanges {
+  PastTwentyFour = 'Past 24 Hours',
+  Today = 'Today',
+  PastFortyEight = 'Past 48 Hours',
+  OneWeek = '1 Week',
+  OneMonth = '1 Month',
+  OneYear = '1 Year',
+  Custom = 'Custom Range',
+}
+
 export interface PartyModalData {
   type: PartyType;
   party: Party;

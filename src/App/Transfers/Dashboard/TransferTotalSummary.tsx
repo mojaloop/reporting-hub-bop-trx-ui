@@ -28,6 +28,7 @@ interface ConnectorProps {
 
 const TransferTotalSummary: FC<ConnectorProps> = ({ filtersModel }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
+    fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,

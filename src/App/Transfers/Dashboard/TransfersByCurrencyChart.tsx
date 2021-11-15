@@ -28,6 +28,7 @@ interface ConnectorProps {
 
 const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_CURRENCY, {
+    fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,
