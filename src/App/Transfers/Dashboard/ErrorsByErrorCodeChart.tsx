@@ -8,7 +8,7 @@ import { TransferSummary } from 'apollo/types';
 import { GET_TRANSFER_SUMMARY } from 'apollo/query';
 import * as selectors from '../selectors';
 import { TransfersFilter } from '../types';
-import { RED_CHART_GRADIENT_COLORS, renderActiveShape, truncateLegend } from './utils';
+import { RED_CHART_GRADIENT_COLORS, renderActiveShape, renderRedLegend } from './utils';
 
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
@@ -22,6 +22,7 @@ interface ConnectorProps {
 
 const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
+    fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,
@@ -61,15 +62,17 @@ const ByCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
     }
 
     content = (
-      <PieChart width={300} height={120}>
+      <PieChart id="ErrorsByErrorCodeChart" width={300} height={120}>
         <Legend
+          id="ErrorsByErrorCodeChartLegend"
+          name="By Error Code"
           layout="vertical"
           verticalAlign="middle"
           align="right"
           width={50}
           height={100}
           iconSize={0}
-          formatter={truncateLegend}
+          content={renderRedLegend}
         />
         <Pie
           data={firstThree}

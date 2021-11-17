@@ -1,6 +1,53 @@
 /* eslint-disable prettier/prettier */
 import { gql } from '@apollo/client';
 
+export const GET_TRANSFER = gql`
+  query GetTransfer($transferId: String!) {
+    transfer(transferId: $transferId) {
+      transferId
+      transferState
+      transactionType
+      currency
+      amount
+      settlementId
+      createdAt
+      quoteId
+      partyLookupEvents
+      quoteEvents
+      transferEvents
+      settlementEvents
+      payeeDFSP {
+        id
+        name
+        description
+      }
+      payerDFSP {
+        id
+        name
+        description
+      }
+      payerParty {
+        id
+        firstName
+        lastName
+        middleName
+        dateOfBirth
+        idType
+        idValue
+      }
+      payeeParty {
+        id
+        firstName
+        lastName
+        middleName
+        dateOfBirth
+        idType
+        idValue
+      }
+    }
+  }
+`;
+
 export const GET_TRANSFERS_WITH_EVENTS = gql`
   query GetTransfersWithEvents(
     $startDate: DateTimeFlexible!

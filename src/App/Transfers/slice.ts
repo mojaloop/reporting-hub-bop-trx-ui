@@ -8,6 +8,7 @@ const initialState: types.TransfersState = {
   selectedJson: undefined,
   selectedParty: undefined,
   transfersFilter: {
+    transferId: undefined,
     payerFSPId: undefined,
     payeeFSPId: undefined,
     payerIdType: undefined,
@@ -18,7 +19,7 @@ const initialState: types.TransfersState = {
     to: moment().toString(),
     currency: undefined,
     transferState: undefined,
-    timeframeSelect: '24hours',
+    timeframeSelect: types.DateRanges.PastTwentyFour,
   },
 };
 
@@ -71,7 +72,9 @@ const slice = createSlice({
         ...state,
         transfersFilter: {
           ...state.transfersFilter,
-          [field]: value,
+          // @ts-ignore
+          // Default to initial state if value is falsy
+          [field]: value || initialState.transfersFilter[field],
         },
       };
     },

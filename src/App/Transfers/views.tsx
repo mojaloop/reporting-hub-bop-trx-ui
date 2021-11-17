@@ -14,11 +14,11 @@ import withMount from 'hocs';
 import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
 import { useLazyQuery } from '@apollo/client';
-import { GET_TRANSFERS_WITH_EVENTS } from 'apollo/query';
+import { GET_TRANSFER, GET_TRANSFERS_WITH_EVENTS } from 'apollo/query';
 import { DFSP, Party, Transfer } from 'apollo/types';
 import { Collapse } from 'antd';
 import moment from 'moment';
-import { TransfersFilter, FilterChangeValue } from './types';
+import { TransfersFilter, FilterChangeValue, DateRanges } from './types';
 import { actions } from './slice';
 import * as selectors from './selectors';
 import './Transfers.scss';
@@ -26,6 +26,7 @@ import TransferDetailsModal from './TransferDetails';
 import JsonModal from './JsonModal';
 import PartyModal from './PartyModal';
 import Dashboard from './Dashboard';
+import { dateRanges, partyIdTypeOptions, transferStateOptions } from './constants';
 
 const { Panel } = Collapse;
 const transfersColumns = [
@@ -79,60 +80,6 @@ const transfersColumns = [
   },
 ];
 
-const IDTypes = [
-  {
-    label: 'MSISDN',
-    value: 'MSISDN',
-  },
-  {
-    label: 'EMAIL',
-    value: 'EMAIL',
-  },
-  {
-    label: 'PERSONAL_ID',
-    value: 'PERSONAL_ID',
-  },
-  {
-    label: 'BUSINESS',
-    value: 'BUSINESS',
-  },
-  {
-    label: 'DEVICE',
-    value: 'DEVICE',
-  },
-  {
-    label: 'ACCOUNT_ID',
-    value: 'ACCOUNT_ID',
-  },
-  {
-    label: 'IBAN',
-    value: 'IBAN',
-  },
-  {
-    label: 'ALIAS',
-    value: 'ALIAS',
-  },
-];
-
-const TransferStateTypes = [
-  {
-    label: 'ABORTED',
-    value: 'ABORTED',
-  },
-  {
-    label: 'COMMITTED',
-    value: 'COMMITTED',
-  },
-  {
-    label: 'RESERVED',
-    value: 'RESERVED',
-  },
-  {
-    label: 'SETTLED',
-    value: 'SETTLED',
-  },
-];
-
 function fromDate(value: Date | undefined): string | undefined {
   if (value) {
     return value.toISOString();
@@ -173,63 +120,34 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
         kind="primary"
         size="small"
         onChange={(value: string) => {
-          if (value === '24hours') {
+          if (value === DateRanges.PastTwentyFour) {
             onFilterChange('from', fromDate(moment().subtract(1, 'days').toDate()));
             onFilterChange('to', fromDate(moment().toDate()));
           }
-          if (value === 'today') {
+          if (value === DateRanges.Today) {
             onFilterChange('from', fromDate(moment().startOf('day').toDate()));
             onFilterChange('to', fromDate(moment().endOf('day').toDate()));
           }
-          if (value === '48hours') {
+          if (value === DateRanges.PastFortyEight) {
             onFilterChange('from', fromDate(moment().subtract(2, 'days').toDate()));
             onFilterChange('to', fromDate(moment().toDate()));
           }
-          if (value === '1week') {
+          if (value === DateRanges.OneWeek) {
             onFilterChange('from', fromDate(moment().subtract(1, 'week').toDate()));
             onFilterChange('to', fromDate(moment().toDate()));
           }
-          if (value === '1month') {
+          if (value === DateRanges.OneMonth) {
             onFilterChange('from', fromDate(moment().subtract(1, 'month').toDate()));
             onFilterChange('to', fromDate(moment().toDate()));
           }
-          if (value === '1year') {
+          if (value === DateRanges.OneYear) {
             onFilterChange('from', fromDate(moment().subtract(1, 'year').toDate()));
             onFilterChange('to', fromDate(moment().toDate()));
           }
           onFilterChange('timeframeSelect', value);
         }}
         value={model.timeframeSelect}
-        options={[
-          {
-            label: 'Past 24 Hours',
-            value: '24hours',
-          },
-          {
-            label: 'Today',
-            value: 'today',
-          },
-          {
-            label: 'Past 48 Hours',
-            value: '48hours',
-          },
-          {
-            label: '1 Week',
-            value: '1week',
-          },
-          {
-            label: '1 Month',
-            value: '1month',
-          },
-          {
-            label: '1 Year',
-            value: '1year',
-          },
-          {
-            label: 'Custom Range',
-            value: 'custom',
-          },
-        ]}
+        options={dateRanges}
         placeholder="Choose a value"
       />
       <DatePicker
@@ -241,7 +159,7 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
         placeholder="From"
         onChange={(value) => {
           onFilterChange('from', fromDate(value));
-          onFilterChange('timeframeSelect', 'custom');
+          onFilterChange('timeframeSelect', DateRanges.Custom);
         }}
         withTime
       />
@@ -254,7 +172,7 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
         placeholder="To"
         onChange={(value) => {
           onFilterChange('to', fromDate(value));
-          onFilterChange('timeframeSelect', 'custom');
+          onFilterChange('timeframeSelect', DateRanges.Custom);
         }}
         withTime
       />
@@ -278,6 +196,15 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
       <div className="transfers__filters__filter-row">
         <TextField
           className="transfers__filters__textfield"
+          placeholder="Transfer ID"
+          size="small"
+          value={model?.transferId}
+          onChange={(value) => onFilterChange('transferId', value)}
+        />
+      </div>
+      <div className="transfers__filters__filter-row">
+        <TextField
+          className="transfers__filters__textfield"
           placeholder="Payer FSPID"
           size="small"
           value={model?.payerFSPId}
@@ -288,8 +215,9 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
           size="small"
           id="filter_payerIdType"
           placeholder="Payer ID Type"
-          options={IDTypes}
+          options={partyIdTypeOptions}
           value={model?.payerIdType}
+          onClear={() => onFilterChange('payerIdType', undefined)}
           onChange={(value) => onFilterChange('payerIdType', value as string)}
         />
         <TextField
@@ -313,8 +241,9 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
           size="small"
           id="filter_payeeIdType"
           placeholder="Payee ID Type"
-          options={IDTypes}
+          options={partyIdTypeOptions}
           value={model?.payeeIdType}
+          onClear={() => onFilterChange('payeeIdType', undefined)}
           onChange={(value) => onFilterChange('payeeIdType', value as string)}
         />
         <TextField
@@ -337,8 +266,9 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
           className="transfers__filters__select"
           size="small"
           placeholder="Transfer State"
-          options={TransferStateTypes}
+          options={transferStateOptions}
           value={model?.transferState}
+          onClear={() => onFilterChange('transferState', undefined)}
           onChange={(value) => onFilterChange('transferState', value as string)}
         />
         <Button
@@ -364,36 +294,43 @@ const Transfers: FC<ConnectorProps> = ({
   onFilterChange,
 }) => {
   let content = null;
-  // There is this sneaky cache bug in `apollo-graphql` where the http response
-  // contains the correct data but the resulting data given by `useLazyQuery`
-  // resolves into some fields being `null`.
-  // Believe it is related to https://github.com/apollographql/apollo-client/issues/8898
-  // The solution is to set `fetchPolicy: 'no-cache'`
-  const [getTransfers, { loading, error, data }] = useLazyQuery(GET_TRANSFERS_WITH_EVENTS, {
-    fetchPolicy: 'no-cache',
-    variables: {
-      startDate: filtersModel.from,
-      endDate: filtersModel.to,
-      currency: filtersModel.currency,
-      transferState: filtersModel.transferState,
-      payeeFSPId: filtersModel.payeeFSPId,
-      payerFSPId: filtersModel.payerFSPId,
-      payeeIdType: filtersModel.payeeIdType,
-      payerIdType: filtersModel.payerIdType,
-      payeeIdValue: filtersModel.payeeIdValue,
-      payerIdValue: filtersModel.payerIdValue,
+  const [getTransfers, { loading, error, data }] = useLazyQuery(
+    filtersModel.transferId ? GET_TRANSFER : GET_TRANSFERS_WITH_EVENTS,
+    {
+      variables: filtersModel.transferId
+        ? { transferId: filtersModel.transferId }
+        : {
+            startDate: filtersModel.from,
+            endDate: filtersModel.to,
+            currency: filtersModel.currency,
+            transferState: filtersModel.transferState,
+            payeeFSPId: filtersModel.payeeFSPId,
+            payerFSPId: filtersModel.payerFSPId,
+            payeeIdType: filtersModel.payeeIdType,
+            payerIdType: filtersModel.payerIdType,
+            payeeIdValue: filtersModel.payeeIdValue,
+            payerIdValue: filtersModel.payerIdValue,
+          },
     },
-  });
+  );
 
   if (error) {
     content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
   } else if (loading) {
     content = <Spinner center />;
   } else {
+    let rows;
+    if (data && data.transfer) {
+      rows = [data.transfer];
+    } else if (data && data.transfers) {
+      rows = data.transfers;
+    } else {
+      rows = [];
+    }
     content = (
       <Table
         columns={transfersColumns}
-        rows={data ? data.transfers : []}
+        rows={rows}
         pageSize={20}
         paginatorSize={7}
         flexible

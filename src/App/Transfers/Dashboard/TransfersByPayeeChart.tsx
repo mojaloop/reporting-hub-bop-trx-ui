@@ -9,7 +9,7 @@ import { GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP } from 'apollo/query';
 import * as selectors from '../selectors';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
-import { BLUE_CHART_GRADIENT_COLORS, renderActiveShape, truncateLegend } from './utils';
+import { GREEN_CHART_GRADIENT_COLORS, renderActiveShape, renderGreenLegend } from './utils';
 
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
@@ -27,6 +27,7 @@ interface ConnectorProps {
 
 const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP, {
+    fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,
@@ -65,15 +66,17 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
     }
 
     content = (
-      <PieChart width={300} height={120}>
+      <PieChart id="TransfersByPayeeChart" width={300} height={120}>
         <Legend
+          id="TransfersByPayeeChartLegend"
+          name="By Payee"
           layout="vertical"
           verticalAlign="middle"
           align="right"
           width={50}
           height={100}
           iconSize={0}
-          formatter={truncateLegend}
+          content={renderGreenLegend}
         />
         <Pie
           data={firstThree}
@@ -95,7 +98,7 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
           {firstThree.map((_entry: any, index: number) => (
             <Cell
               key={`${_entry.payeeDFSP}`}
-              fill={BLUE_CHART_GRADIENT_COLORS[index % BLUE_CHART_GRADIENT_COLORS.length]}
+              fill={GREEN_CHART_GRADIENT_COLORS[index % GREEN_CHART_GRADIENT_COLORS.length]}
             />
           ))}
         </Pie>

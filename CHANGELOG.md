@@ -1,4 +1,11 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
+## [1.6.0](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.5.2...v1.6.0) (2021-11-15)
+
+
+### Features
+
+* add id search, clearable selects, fix cache bugs and data  ([#16](https://github.com/mojaloop/reporting-hub-bop-trx-ui/issues/16)) ([af7ec79](https://github.com/mojaloop/reporting-hub-bop-trx-ui/commit/af7ec79480aca5542b7854bdb07804320ff5341e))
+
 ### [1.5.2](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.5.1...v1.5.2) (2021-11-11)
 
 

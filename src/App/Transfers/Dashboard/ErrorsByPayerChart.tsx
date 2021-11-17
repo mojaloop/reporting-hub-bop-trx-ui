@@ -9,7 +9,7 @@ import { TransferSummary } from 'apollo/types';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
-import { RED_CHART_GRADIENT_COLORS, renderActiveShape, truncateLegend } from './utils';
+import { RED_CHART_GRADIENT_COLORS, renderActiveShape, renderRedLegend } from './utils';
 
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
@@ -27,6 +27,7 @@ interface ConnectorProps {
 
 const ByPayerChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYER_DFSP, {
+    fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
       endDate: filtersModel.to,
@@ -65,15 +66,17 @@ const ByPayerChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
     }
 
     content = (
-      <PieChart width={300} height={120}>
+      <PieChart id="ErrorsByPayerChart" width={300} height={120}>
         <Legend
+          id="ErrorsByPayerChartLegend"
+          name="By Payer"
           layout="vertical"
           verticalAlign="middle"
           align="right"
           width={50}
           height={100}
           iconSize={0}
-          formatter={truncateLegend}
+          content={renderRedLegend}
         />
         <Pie
           data={firstThree}
