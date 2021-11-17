@@ -12,7 +12,7 @@ spec:
         backend:
           serviceName: reporting-hub-bop-trx-ui
           servicePort: http
-      - path: /api/ledger(/|$)(.*)
+      - path: /reporting-api(/|$)(.*)
         backend:
-          serviceName: centralledger-service
+          serviceName: reporting-hub-bop-api-svc
           servicePort: 80

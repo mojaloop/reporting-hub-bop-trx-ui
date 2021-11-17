@@ -4,7 +4,7 @@ metadata:
   name: mojaloop-kustomize
 # We only use profiles here because it seems impossible to delete the default build command in a
 # profile, but we don't want to build the portal image if we're only interested in deploying the
-# bakend.
+# backend.
 profiles:
 - name: backend
   deploy:

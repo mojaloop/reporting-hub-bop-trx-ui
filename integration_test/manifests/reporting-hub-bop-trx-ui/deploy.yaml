@@ -16,7 +16,7 @@ spec:
       - name: app
         image: ghcr.io/mojaloop/reporting-hub-bop-trx-ui:v0.0.0
         ports:
-        - containerPort: 8084
+        - containerPort: 8082
         env:
-          - name: CENTRAL_LEDGER_ENDPOINT
-            value: /api/ledger
+          - name: REACT_APP_API_BASE_URL
+            value: /reporting-api

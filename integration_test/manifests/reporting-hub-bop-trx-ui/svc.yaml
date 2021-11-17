@@ -7,7 +7,7 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: 8084
+    targetPort: 8082
     name: http
   selector:
     app.kubernetes.io/name: reporting-hub-bop-trx-ui
