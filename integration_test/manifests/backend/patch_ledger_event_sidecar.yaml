@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ignored-by-kustomize
+spec:
+  template:
+    spec:
+      containers:
+        - name: centralledger-service
+          env:
+            - name: EVENT_SDK_SIDECAR_DISABLED
+              value: "false"
+        - name: centralledger-service-sidecar
+          image: "mojaloop/event-sidecar:v11.0.1"
+          imagePullPolicy: IfNotPresent
+          command:
+            - npm
+            - run
+            - start
+          ports:
+            - containerPort: 4001
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4001
+            initialDelaySeconds: 120
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4001
+            initialDelaySeconds: 90
+            periodSeconds: 15
+          volumeMounts:
+            - name: sidecar-volume
+              mountPath: /opt/event-sidecar/config
+          env:
+            - name: LOG_LEVEL
+              value: "info"
+            - name: LOG_FILTER
+              value: "error, warn, info"
+            - name: EVENT_SDK_LOG_FILTER
+              value: "audit:*, log:info, log:warn, log:error"
+            - name: EVENT_SDK_LOG_METADATA_ONLY
+              value: "true"
+      volumes:
+        - name: sidecar-volume
+          configMap:
+            name: centralledger-service-sidecar
+            items:
+            - key: default.json
+              path: default.json

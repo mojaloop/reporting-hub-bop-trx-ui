@@ -4,7 +4,17 @@ resources:
 - github.com/partiallyordered/voodoo-doll/kubernetes?ref=ad96349ef8fe91a422377be8f53aea56aee60c8e
 - secret_copy.yaml
 - ing.yaml
+- ml_adapter_sidecar_config.yaml
+- central_ledger_sidecar_config.yaml
 
 configMapGenerator: []
 
-patches: []
+patches:
+- target:
+    kind: Deployment
+    name: ml-api-adapter-service
+  path: patch_adapter_event_sidecar.yaml
+- target:
+    kind: Deployment
+    name: centralledger-service
+  path: patch_ledger_event_sidecar.yaml

@@ -59,7 +59,7 @@ fixture `Find Transfers Feature`
   .beforeEach(async (t) => {
     await waitForReact();
     await t
-      .click(SideMenu.transfersButton); // yes, not the settlements button
+      .click(SideMenu.transfersButton);
   });
 
 test.meta({
@@ -87,6 +87,7 @@ test.meta({
   }
 });
 
+/*
 test.meta({
   ID: '',
   STORY: 'MMD-1430',
@@ -110,3 +111,4 @@ test.meta({
 
   await t.expect(popup.exists).ok('Transfer details popup not found in dom');
 });
+*/

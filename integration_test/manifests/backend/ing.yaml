@@ -14,5 +14,5 @@ spec:
           servicePort: http
       - path: /reporting-api(/|$)(.*)
         backend:
-          serviceName: reporting-hub-bop-api-svc
+          serviceName: bof-reporting-hub-bop-api-svc
           servicePort: 80

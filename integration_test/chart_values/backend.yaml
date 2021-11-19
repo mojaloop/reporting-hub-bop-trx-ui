@@ -923,7 +923,7 @@ kafka:
     kafka:
       ## @param metrics.kafka.enabled Whether or not to create a standalone Kafka exporter to expose Kafka metrics
       ##
-      enabled: true
+      enabled: false
       ## Bitnami Kafka exporter image
       ## ref: https://hub.docker.com/r/bitnami/kafka-exporter/tags/
       ## @param metrics.kafka.image.registry Kafka exporter image registry
@@ -1059,7 +1059,7 @@ kafka:
     jmx:
       ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
       ##
-      enabled: true
+      enabled: false
       ## Bitnami JMX exporter image
       ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
       ## @param metrics.jmx.image.registry JMX exporter image registry
@@ -2333,7 +2333,7 @@ mysql:
 # NB: kowl turned off for the time being as the chart in the repo does not work with k8s v1.22
 #     though the chart source appears to have been updated.
 kowl:
-  enabled: false
+  enabled: true
   resources:
     limits:
       cpu: 500m
