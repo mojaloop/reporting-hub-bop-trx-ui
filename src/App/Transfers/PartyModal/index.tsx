@@ -3,6 +3,7 @@ import { FormField, Modal } from 'components';
 import { connect } from 'react-redux';
 import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
+import moment from 'moment';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
 import { PartyModalData } from '../types';
@@ -57,7 +58,11 @@ const JsonModal: FC<ConnectorProps> = ({ partyModalData, onModalCloseClick }) =>
           disabled
           type="text"
           label="Date of Birth"
-          value={partyModalData.party.dateOfBirth || ''}
+          value={
+            partyModalData.party.dateOfBirth
+              ? moment(partyModalData.party.dateOfBirth).local().format()
+              : ''
+          }
         />
         <FormField
           disabled
