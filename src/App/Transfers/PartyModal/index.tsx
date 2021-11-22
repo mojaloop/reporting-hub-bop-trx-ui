@@ -23,7 +23,11 @@ interface ConnectorProps {
 
 const JsonModal: FC<ConnectorProps> = ({ partyModalData, onModalCloseClick }) => {
   return (
-    <Modal title={`${partyModalData.type} Information`} onClose={onModalCloseClick}>
+    <Modal
+      title={`${partyModalData.type} Information`}
+      className="partyDetailsModal"
+      onClose={onModalCloseClick}
+    >
       <FormField.Container direction="row">
         <FormField disabled type="text" label="Id Type" value={partyModalData.party.idType || ''} />
         <FormField
