@@ -1423,10 +1423,10 @@
     vkbeautify "^0.99.3"
     whatwg-fetch "^3.0.0"
 
-"@modusbox/react-components@^0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@modusbox/react-components/-/react-components-0.1.7.tgz#1c74bce613bbccc35f913b3c96865a154260ad4b"
-  integrity sha512-FrM8v5PI6Ry7ZGzZgaQX7O8MYYi93xo47GvUcYTsOQoPb6jqbDIUbd68wXLUw6fotoMNswGgOkjSNn1HU+YQZQ==
+"@modusbox/react-components@0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@modusbox/react-components/-/react-components-0.1.9.tgz#f1699f4df450f0f829c980ba911643067ecb029c"
+  integrity sha512-jN8O3EE6SPkBmro0I2aepMnZiBsC+ru+c7EZhVZ259+okVhEodomzEhdDckGWtePVJzPlESFoJfdXj8Cle75+g==
   dependencies:
     "@modusbox/ts-utils" "^0.0.4"
     babel-plugin-react-docgen "^4.2.1"
