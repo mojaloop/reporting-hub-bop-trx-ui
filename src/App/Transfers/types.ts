@@ -21,6 +21,10 @@ export interface ExtensionListItem {
   value: string;
 }
 
+export enum ErrorMessage {
+  NOT_ALLOWED = 'Not Authorised!',
+}
+
 export enum PartyType {
   PAYER = 'Payer',
   PAYEE = 'Payee',

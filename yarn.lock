@@ -10177,6 +10177,13 @@ react-base16-styling@^0.6.0:
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
 
+react-bootstrap-icons@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-icons/-/react-bootstrap-icons-1.6.1.tgz#253e6bf637c983edfb82af0554454a22c5937731"
+  integrity sha512-0xoFKK0soRBx7F0+R8lHmNp7THqaCMnAKm2SfySeTTmyk2HOG6SMXuoqlEI8SPZu2ez4u3dHlrXoo5/2IGWCeA==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-day-picker@7.1.9:
   version "7.1.9"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.1.9.tgz#04b0d956faf1bf85bb6ec6f9ca7966433be13f36"

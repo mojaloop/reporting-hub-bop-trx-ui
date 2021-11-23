@@ -47,7 +47,7 @@ const TransferDetails: FC<ConnectorProps> = ({
             disabled
             type="text"
             label="Transfer State"
-            value={transferDetails.transferState || ''}
+            value={`${transferDetails.transferState || ''} ${transferDetails.errorCode || ''}`}
           />
         </FormField.Container>
 
