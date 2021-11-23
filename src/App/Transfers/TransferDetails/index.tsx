@@ -32,6 +32,18 @@ const TransferDetails: FC<ConnectorProps> = ({
   onsetJsonModalData,
   onsetPartyModalData,
 }) => {
+  let errorCodeField;
+  if (transferDetails.errorCode) {
+    errorCodeField = (
+      <FormField
+        disabled
+        type="text"
+        label="Error Code"
+        value={transferDetails.errorCode.toString()}
+      />
+    );
+  }
+
   const TechnicalDetailsTab = (
     <TabPanel className="technicalDetailsTab">
       <FormField.Container direction="row" align="top left">
@@ -47,8 +59,9 @@ const TransferDetails: FC<ConnectorProps> = ({
             disabled
             type="text"
             label="Transfer State"
-            value={`${transferDetails.transferState || ''} ${transferDetails.errorCode || ''}`}
+            value={transferDetails.transferState || ''}
           />
+          {errorCodeField || <div />}
         </FormField.Container>
 
         <FormField.Container direction="column">
