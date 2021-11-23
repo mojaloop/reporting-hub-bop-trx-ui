@@ -9,12 +9,12 @@ resources:
 
 configMapGenerator: []
 
-patches:
-- target:
-    kind: Deployment
-    name: ml-api-adapter-service
-  path: patch_adapter_event_sidecar.yaml
-- target:
-    kind: Deployment
-    name: centralledger-service
-  path: patch_ledger_event_sidecar.yaml
+patches: []
+#- target:
+#    kind: Deployment
+#    name: ml-api-adapter-service
+#  path: patch_adapter_event_sidecar.yaml
+#- target:
+#    kind: Deployment
+#    name: centralledger-service
+#  path: patch_ledger_event_sidecar.yaml

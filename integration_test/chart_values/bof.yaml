@@ -64,6 +64,7 @@ role-assignment-service:
 
 reporting-hub-bop-api-svc:
   enabled: true
+  auth: false
   ingress:
     enabled: true
     hostname: api-bof.local
