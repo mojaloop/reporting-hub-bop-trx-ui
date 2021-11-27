@@ -2333,7 +2333,7 @@ mysql:
 # NB: kowl turned off for the time being as the chart in the repo does not work with k8s v1.22
 #     though the chart source appears to have been updated.
 kowl:
-  enabled: true
+  enabled: false
   resources:
     limits:
       cpu: 500m
