@@ -59,20 +59,20 @@ fixture `Find Transfers Feature`
   .beforeEach(async (t) => {
     await waitForReact();
     await t
-      .click(SideMenu.transfersButton);
+      .click(SideMenu.transfersButton).wait(2000);
   });
 
 test.meta({
   ID: '',
-  STORY: 'MMD-1430',
+  STORY: '',
   description:
     `Find transfers with no filter selected should return transfers`,
 })('Find transfers with no filter selected should return transfers', async (t) => {
   // navigate to the find transfers page
-  await t.click(SideMenu.transfersButton);
+  await t.click(SideMenu.transfersButton).wait(2000);
 
   // click the find transfers button (no filters selected by default)
-  await t.click(FindTransfersPage.findTransfersButton);
+  await t.click(FindTransfersPage.findTransfersButton).wait(2000);
 
   // we should see two or more rows, one for each transfer we executed above
   const rows = await FindTransfersPage.getResultRows();
@@ -87,28 +87,3 @@ test.meta({
   }
 });
 
-/*
-test.meta({
-  ID: '',
-  STORY: 'MMD-1430',
-  description:
-    `Clicking on a transfer row should show a detail popup`,
-})('Clicking on transfer row should show detail popup', async (t) => {
-  // navigate to the find transfers page
-  await t.click(SideMenu.transfersButton);
-
-  // click the find transfers button (no filters selected by default)
-  await t.click(FindTransfersPage.findTransfersButton);
-
-  // get all rows found
-  const rows = await FindTransfersPage.getResultRows();
-
-  // click the first found row
-  await t.click(rows[0].row);
-  const transferId = await rows[0].id.innerText;
-
-  const popup = FindTransfersPage.getTransferDetailsModal(transferId);
-
-  await t.expect(popup.exists).ok('Transfer details popup not found in dom');
-});
-*/

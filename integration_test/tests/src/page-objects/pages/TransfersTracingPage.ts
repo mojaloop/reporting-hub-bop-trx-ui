@@ -1,5 +1,4 @@
-import { ReactSelector } from 'testcafe-react-selectors';
-import { t } from 'testcafe';
+import { Selector } from 'testcafe';
 
 export type TransferRow = {
   row: Selector,
@@ -7,23 +6,20 @@ export type TransferRow = {
 }
 
 export const FindTransfersPage = {
-  transferId: ReactSelector('Select').withProps({ placeholder: 'Transfer ID' }),
-  clearFiltersButton: ReactSelector('Button').withProps({ label: 'Clear Filters' }),
-  findTransfersButton: ReactSelector('Button').withProps({ label: 'Find Transfers' }),
+  transferId: Selector('.rc-field').withAttribute('placeholder', 'Transfer ID' ),
+  clearFiltersButton: Selector('.rc-button').withText('Clear Filters' ),
+  findTransfersButton: Selector('.rc-button').withText('Find Transfers' ),
 
   async getResultRows(): Promise<TransferRow[]> {
-    const rows = ReactSelector('DataList Rows').findReact('RowItem');
-    // This `expect` forces TestCafe to take a snapshot of the DOM. If we don't make this call,
-    // rows.count always returns zero, and this function fails.
-    // await t.expect(rows.exists).ok('Couldnt find any transfers page rows');
+    const rows = Selector('.rc-table__body__row');
     const length = await rows.count;
     return Array
       .from({ length })
       .map((_, i) => ({
         row: rows.nth(i),
-        id: rows.nth(i).findReact('ItemCell').nth(0),
+        id: rows.nth(i).find('.rc-table__body__cell').nth(0),
       }));
   },
 
-  getTransferDetailsModal: (transferId: string) => ReactSelector('Modal').withProps({ title: `Transfer Details: ${transferId}` }),
+  getTransferDetailsModal: (transferId: string) => Selector('.rc-modal').withProps({ title: `Transfer ${transferId} Details` }),
 };
