@@ -59,7 +59,7 @@ fixture `Find Transfers Feature`
   .beforeEach(async (t) => {
     await waitForReact();
     await t
-      .click(SideMenu.transfersButton).wait(2000);
+      .click(SideMenu.transfersButton).wait(5000);
   });
 
 test.meta({
@@ -69,10 +69,10 @@ test.meta({
     `Find transfers with no filter selected should return transfers`,
 })('Find transfers with no filter selected should return transfers', async (t) => {
   // navigate to the find transfers page
-  await t.click(SideMenu.transfersButton).wait(2000);
+  await t.click(SideMenu.transfersButton).wait(5000);
 
   // click the find transfers button (no filters selected by default)
-  await t.click(FindTransfersPage.findTransfersButton).wait(2000);
+  await t.click(FindTransfersPage.findTransfersButton).wait(5000);
 
   // we should see two or more rows, one for each transfer we executed above
   const rows = await FindTransfersPage.getResultRows();
