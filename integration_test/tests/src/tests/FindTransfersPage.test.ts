@@ -107,7 +107,7 @@ test.meta({
   const rows = await FindTransfersPage.getResultRows();
   await t.expect(rows.length).gt(1);
 
-  // we should see the two transfers we just created
+  // we should see the transfers we just created
   const transferIds = t.fixtureCtx.transfers.map((t: protocol.TransferMessage) => t.transfer_id);
   const rowIds = await Promise.all(rows.map((r: TransferRow) => r.id.innerText));
 
@@ -294,8 +294,8 @@ test.skip.meta({
 })('Navigate to Quote Events Modal of Transfer Modal',
   async (t) => {
     // This requires upgrading the test harness to initiate quote requests
-    // requests with the ALS. Will also require using the TTK and adding the
-    // quoting-service sidecar.
+    // requests with the quoting service. Will also require using the TTK
+    // and adding the quoting-service sidecar.
   },
 );
 
