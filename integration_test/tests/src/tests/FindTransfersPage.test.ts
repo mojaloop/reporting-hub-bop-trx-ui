@@ -234,6 +234,25 @@ test.meta({
   }
 });
 
+test.only.meta({
+  ID: '',
+  STORY: '',
+  description: '',
+})('Transfer dashboard charts appear', async (t) => {
+  // navigate to the find transfers page
+  await t.click(SideMenu.transfersButton).wait(1000);
+
+  // click the find transfers button (no filters selected by default)
+  await t.click(FindTransfersPage.findTransfersButton).wait(1000);
+
+  await t.expect(FindTransfersPage.getChart('TransfersByCurrencyChart').exists).ok('TransfersByCurrencyChart not found');
+  await t.expect(FindTransfersPage.getChart('TransfersByPayerChart').exists).ok('TransfersByPayerChart not found');
+  await t.expect(FindTransfersPage.getChart('TransfersByPayeeChart').exists).ok('TransfersByPayeeChart not found');
+  await t.expect(FindTransfersPage.getChart('ErrorsByErrorCodeChart').exists).ok('ErrorsByErrorCodeChart not found');
+  await t.expect(FindTransfersPage.getChart('ErrorsByPayerChart').exists).ok('ErrorsByPayerChart not found');
+  await t.expect(FindTransfersPage.getChart('ErrorsByPayeeChart').exists).ok('ErrorsByPayeeChart not found');
+});
+
 test.skip.meta({
   ID: '',
   STORY: '',

@@ -43,4 +43,5 @@ export const FindTransfersPage = {
     .withText(`Transfer ${transferId} Details`)
     .parent().parent('.rc-modal'),
   selectTransferStateFilter: (transferState: string) => t.click(Selector('.rc-select__option__label').withText(transferState).parent()).wait(1000),
+  getChart: (chartId: string) => Selector(`#${chartId}`),
 };
