@@ -39,7 +39,7 @@ jobs:
       run: helm repo add mojaloop-charts https://docs.mojaloop.io/charts/repo
 
     - name: Install BizOps Backend
-      run: helm upgrade --install backend mojaloop-charts/backend --devel -f integration_test/chart_values/backend.yaml --version 1.0.0-557.7cb0c96
+      run: helm upgrade --install backend mojaloop-charts/backend --devel -f integration_test/chart_values/backend.yaml
 
     - name: Install BizOps Services
       run: helm upgrade --install bof mojaloop-charts/bof --devel -f integration_test/chart_values/bof.yaml --version 1.0.0-557.7cb0c96
