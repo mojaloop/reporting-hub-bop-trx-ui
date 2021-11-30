@@ -71,36 +71,6 @@ reporting-hub-bop-api-svc:
     path: /proxy/transfers(/|$)(.*)
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /$2
-  envs:
-    - name: CLDB_HOST
-      value: mysql
-    - name: CLDB_PORT
-      value: '3306'
-    - name: CLDB_NAME
-      value: central_ledger
-    - name: CLDB_USER
-      value: central_ledger
-    - name: CLDB_PASSWORD
-      value: whatever
-    - name: CENTRAL_LEDGER_DB_URL
-      value: >-
-        mysql://$(CLDB_USER):$(CLDB_PASSWORD)@$(CLDB_HOST):$(CLDB_PORT)/$(CLDB_NAME)
-    - name: EVENT_DB_HOST
-      value: reporting-events-db
-    - name: EVENT_DB_PORT
-      value: '27017'
-    - name: EVENT_DB_NAME
-      value: default
-    - name: EVENT_DB_USER
-      value: user
-    - name: EVENT_DB_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: reporting-events-db
-          key: mongodb-password
-    - name: EVENT_STORE_DB_URL
-      value: >-
-        mongodb://$(EVENT_DB_USER):$(EVENT_DB_PASSWORD)@$(EVENT_DB_HOST):$(EVENT_DB_PORT)/$(EVENT_DB_NAME)
 
 reporting-legacy-api:
   enabled: false
@@ -181,37 +151,3 @@ security-role-perm-operator-svc:
 
 reporting-events-processor-svc:
   enabled: true
-  config:
-    env:
-    - name: KAFKA_TOPIC_TO_CONSUME
-      value: topic-event
-    - name: KAFKA_CONSUMER_GROUP
-      value: group
-    - name: KAFKA_CLIENT_ID
-      value: client-id
-    - name: KAFKA_HOST
-      value: kafka
-    - name: KAFKA_PORT
-      value: '9092'
-    - name: KAFKA_URI
-      value: '$(KAFKA_HOST):$(KAFKA_PORT)'
-    - name: EVENT_DB_HOST
-      value: reporting-events-db
-    - name: EVENT_DB_PORT
-      value: '27017'
-    - name: EVENT_DB_NAME
-      value: default
-    - name: EVENT_DB_USER
-      value: user
-    - name: EVENT_DB_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: reporting-events-db
-          key: mongodb-password
-    - name: MONGO_DB_URI
-      value: >-
-        mongodb://$(EVENT_DB_USER):$(EVENT_DB_PASSWORD)@$(EVENT_DB_HOST):$(EVENT_DB_PORT)/$(EVENT_DB_NAME)
-    - name: MONGO_DB_DBNAME
-      value: $(EVENT_DB_NAME)
-    - name: MONGO_DB_COLNAME
-      value: reporting
