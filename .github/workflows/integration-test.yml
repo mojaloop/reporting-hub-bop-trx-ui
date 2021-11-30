@@ -36,7 +36,7 @@ jobs:
       run: minikube start --driver=docker --kubernetes-version=v1.21.5
 
     - name: Install Mojaloop Charts
-      run: helm repo add mojaloop-charts http://docs.mojaloop.io/charts/repo
+      run: helm repo add mojaloop-charts https://docs.mojaloop.io/charts/repo
 
     - name: Install BizOps Backend
       run: helm upgrade --install backend mojaloop-charts/backend --devel -f integration_test/chart_values/backend.yaml
