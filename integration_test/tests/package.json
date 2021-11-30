@@ -1,10 +1,10 @@
 {
-  "name": "e2e-ui-tests",
+  "name": "int-ui-tests",
   "version": "1.0.0",
   "engines": {
     "node": ">=16.13.0"
   },
-  "description": "E2E tests for Finance Portal",
+  "description": "Integration tests for the Transfer Tracing Microfrontend",
   "main": "index.js",
   "//": "We explicitly configure testcafe to compile our tests with our installed version of typescript. We therefore alias typescript to 'ts4' in order to reduce the chance of accidentally using the wrong module.",
   "dependencies": {
