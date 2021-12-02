@@ -1,4 +1,11 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
+### [1.6.1](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.6.0...v1.6.1) (2021-12-02)
+
+
+### Bug Fixes
+
+* fix account sort, move transferId field, standardize dates, etc ([#17](https://github.com/mojaloop/reporting-hub-bop-trx-ui/issues/17)) ([c28a925](https://github.com/mojaloop/reporting-hub-bop-trx-ui/commit/c28a92558e1a241a01abdf713f3ca4e692ca1ba2))
+
 ## [1.6.0](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.5.2...v1.6.0) (2021-11-15)
 
 

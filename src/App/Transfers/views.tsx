@@ -52,6 +52,9 @@ const transfersColumns = [
     fn: (rawValue: Number) => {
       return `${rawValue ? rawValue.toString() : ''}`;
     },
+    sort: (lValue: Transfer, rValue: Transfer) => {
+      return (lValue.amount || 0) - (rValue.amount || 0);
+    },
   },
   {
     label: 'Payer DFSP',
@@ -77,6 +80,9 @@ const transfersColumns = [
   {
     label: 'Date Submitted',
     key: 'createdAt',
+    fn: (rawValue: Number) => {
+      return `${rawValue ? moment(rawValue.toString()).local().format() : ''}`;
+    },
   },
 ];
 
@@ -114,84 +120,6 @@ interface ConnectorProps {
 
 const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFiltersClick }) => {
   return (
-    <div className="transfers__filters__filter-row">
-      <Select
-        className="transfers__filters__date-filter"
-        kind="primary"
-        size="small"
-        onChange={(value: string) => {
-          if (value === DateRanges.PastTwentyFour) {
-            onFilterChange('from', fromDate(moment().subtract(1, 'days').toDate()));
-            onFilterChange('to', fromDate(moment().toDate()));
-          }
-          if (value === DateRanges.Today) {
-            onFilterChange('from', fromDate(moment().startOf('day').toDate()));
-            onFilterChange('to', fromDate(moment().endOf('day').toDate()));
-          }
-          if (value === DateRanges.PastFortyEight) {
-            onFilterChange('from', fromDate(moment().subtract(2, 'days').toDate()));
-            onFilterChange('to', fromDate(moment().toDate()));
-          }
-          if (value === DateRanges.OneWeek) {
-            onFilterChange('from', fromDate(moment().subtract(1, 'week').toDate()));
-            onFilterChange('to', fromDate(moment().toDate()));
-          }
-          if (value === DateRanges.OneMonth) {
-            onFilterChange('from', fromDate(moment().subtract(1, 'month').toDate()));
-            onFilterChange('to', fromDate(moment().toDate()));
-          }
-          if (value === DateRanges.OneYear) {
-            onFilterChange('from', fromDate(moment().subtract(1, 'year').toDate()));
-            onFilterChange('to', fromDate(moment().toDate()));
-          }
-          onFilterChange('timeframeSelect', value);
-        }}
-        value={model.timeframeSelect}
-        options={dateRanges}
-        placeholder="Choose a value"
-      />
-      <DatePicker
-        className="transfers__filters__date-filter"
-        size="small"
-        id="filter_date_from"
-        format="yyyy-MM-dd'T'HH:mm:ss xxx"
-        value={model && model.from ? new Date(model.from).toISOString() : undefined}
-        placeholder="From"
-        onChange={(value) => {
-          onFilterChange('from', fromDate(value));
-          onFilterChange('timeframeSelect', DateRanges.Custom);
-        }}
-        withTime
-      />
-      <DatePicker
-        className="transfers__filters__date-filter"
-        size="small"
-        id="filter_date_to"
-        format="yyyy-MM-dd'T'HH:mm:ss xxx"
-        value={model && model.to ? new Date(model.to).toISOString() : undefined}
-        placeholder="To"
-        onChange={(value) => {
-          onFilterChange('to', fromDate(value));
-          onFilterChange('timeframeSelect', DateRanges.Custom);
-        }}
-        withTime
-      />
-      <Button
-        noFill
-        className="transfers__filters__date-filter"
-        size="small"
-        kind="danger"
-        label="Clear Filters"
-        onClick={() => {
-          onClearFiltersClick();
-        }}
-      />
-    </div>
-  );
-};
-
-const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransfersClick }) => {
-  return (
     <div className="transfers__filters">
       <div className="transfers__filters__filter-row">
         <TextField
@@ -201,7 +129,87 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
           value={model?.transferId}
           onChange={(value) => onFilterChange('transferId', value)}
         />
+        <Button
+          noFill
+          className="transfers__filters__date-filter"
+          size="small"
+          kind="danger"
+          label="Clear Filters"
+          onClick={() => {
+            onClearFiltersClick();
+          }}
+        />
       </div>
+      <div className="transfers__filters__filter-row">
+        <Select
+          className="transfers__filters__date-filter"
+          kind="primary"
+          size="small"
+          onChange={(value: string) => {
+            if (value === DateRanges.PastTwentyFour) {
+              onFilterChange('from', fromDate(moment().subtract(1, 'days').toDate()));
+              onFilterChange('to', fromDate(moment().toDate()));
+            }
+            if (value === DateRanges.Today) {
+              onFilterChange('from', fromDate(moment().startOf('day').toDate()));
+              onFilterChange('to', fromDate(moment().endOf('day').toDate()));
+            }
+            if (value === DateRanges.PastFortyEight) {
+              onFilterChange('from', fromDate(moment().subtract(2, 'days').toDate()));
+              onFilterChange('to', fromDate(moment().toDate()));
+            }
+            if (value === DateRanges.OneWeek) {
+              onFilterChange('from', fromDate(moment().subtract(1, 'week').toDate()));
+              onFilterChange('to', fromDate(moment().toDate()));
+            }
+            if (value === DateRanges.OneMonth) {
+              onFilterChange('from', fromDate(moment().subtract(1, 'month').toDate()));
+              onFilterChange('to', fromDate(moment().toDate()));
+            }
+            if (value === DateRanges.OneYear) {
+              onFilterChange('from', fromDate(moment().subtract(1, 'year').toDate()));
+              onFilterChange('to', fromDate(moment().toDate()));
+            }
+            onFilterChange('timeframeSelect', value);
+          }}
+          value={model.timeframeSelect}
+          options={dateRanges}
+          placeholder="Choose a value"
+        />
+        <DatePicker
+          className="transfers__filters__date-filter"
+          size="small"
+          id="filter_date_from"
+          format="yyyy-MM-dd'T'HH:mm:ss xxx"
+          value={model && model.from ? new Date(model.from).toISOString() : undefined}
+          placeholder="From"
+          onChange={(value) => {
+            onFilterChange('from', fromDate(value));
+            onFilterChange('timeframeSelect', DateRanges.Custom);
+          }}
+          withTime
+        />
+        <DatePicker
+          className="transfers__filters__date-filter"
+          size="small"
+          id="filter_date_to"
+          format="yyyy-MM-dd'T'HH:mm:ss xxx"
+          value={model && model.to ? new Date(model.to).toISOString() : undefined}
+          placeholder="To"
+          onChange={(value) => {
+            onFilterChange('to', fromDate(value));
+            onFilterChange('timeframeSelect', DateRanges.Custom);
+          }}
+          withTime
+        />
+      </div>
+    </div>
+  );
+};
+
+const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransfersClick }) => {
+  return (
+    <div className="transfers__filters">
       <div className="transfers__filters__filter-row">
         <TextField
           className="transfers__filters__textfield"

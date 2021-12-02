@@ -71,6 +71,7 @@ export const GET_TRANSFERS_WITH_EVENTS = gql`
         payee: { dfsp: $payeeFSPId, idType: $payeeIdType, idValue: $payeeIdValue }
       }
     ) {
+      errorCode
       transferId
       transferState
       transactionType

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
 import { Transfer } from 'apollo/types';
+import moment from 'moment';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
 import { JsonModalData, PartyType, PartyModalData } from '../types';
@@ -31,6 +32,18 @@ const TransferDetails: FC<ConnectorProps> = ({
   onsetJsonModalData,
   onsetPartyModalData,
 }) => {
+  let errorCodeField;
+  if (transferDetails.errorCode) {
+    errorCodeField = (
+      <FormField
+        disabled
+        type="text"
+        label="Error Code"
+        value={transferDetails.errorCode.toString()}
+      />
+    );
+  }
+
   const TechnicalDetailsTab = (
     <TabPanel className="technicalDetailsTab">
       <FormField.Container direction="row" align="top left">
@@ -48,6 +61,7 @@ const TransferDetails: FC<ConnectorProps> = ({
             label="Transfer State"
             value={transferDetails.transferState || ''}
           />
+          {errorCodeField || <div />}
         </FormField.Container>
 
         <FormField.Container direction="column">
@@ -200,7 +214,9 @@ const TransferDetails: FC<ConnectorProps> = ({
             disabled
             type="text"
             label="Date Submitted"
-            value={transferDetails.createdAt || ''}
+            value={
+              transferDetails.createdAt ? moment(transferDetails.createdAt).local().format() : ''
+            }
           />
           <FormField
             disabled

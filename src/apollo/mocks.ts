@@ -92,6 +92,7 @@ export const TransferMock = Factory.Sync.makeFactory<Transfer>({
   settlementEvents: Factory.each(() => {
     return JSON.parse(faker.datatype.json());
   }),
+  errorCode: Factory.each(() => faker.datatype.number()),
 });
 
 export const TransferSummaryMock = Factory.Sync.makeFactory<TransferSummary>({

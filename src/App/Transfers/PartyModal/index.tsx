@@ -3,6 +3,7 @@ import { FormField, Modal } from 'components';
 import { connect } from 'react-redux';
 import { State, Dispatch } from 'store/types';
 import { ReduxContext } from 'store';
+import moment from 'moment';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
 import { PartyModalData } from '../types';
@@ -22,7 +23,11 @@ interface ConnectorProps {
 
 const JsonModal: FC<ConnectorProps> = ({ partyModalData, onModalCloseClick }) => {
   return (
-    <Modal title={`${partyModalData.type} Information`} onClose={onModalCloseClick}>
+    <Modal
+      title={`${partyModalData.type} Information`}
+      className="partyDetailsModal"
+      onClose={onModalCloseClick}
+    >
       <FormField.Container direction="row">
         <FormField disabled type="text" label="Id Type" value={partyModalData.party.idType || ''} />
         <FormField
@@ -57,7 +62,11 @@ const JsonModal: FC<ConnectorProps> = ({ partyModalData, onModalCloseClick }) =>
           disabled
           type="text"
           label="Date of Birth"
-          value={partyModalData.party.dateOfBirth || ''}
+          value={
+            partyModalData.party.dateOfBirth
+              ? moment(partyModalData.party.dateOfBirth).local().format()
+              : ''
+          }
         />
         <FormField
           disabled

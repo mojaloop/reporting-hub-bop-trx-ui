@@ -6,7 +6,8 @@ import { MessageBox, Spinner } from 'components';
 import { useQuery } from '@apollo/client';
 import { TransferSummary } from 'apollo/types';
 import { Statistic, Typography } from 'antd';
-import { FilterChangeValue, TransfersFilter } from '../types';
+import { useRouteMatch, useHistory } from 'react-router-dom';
+import { ErrorMessage, FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
 
@@ -35,8 +36,13 @@ const TransferTotalSummary: FC<ConnectorProps> = ({ filtersModel }) => {
     },
   });
   let content = null;
-
   if (error) {
+    if (error.message === ErrorMessage.NOT_ALLOWED) {
+      const match = useRouteMatch();
+      const history = useHistory();
+      const path = match.url === '/' ? '' : match.url;
+      history.push(`${path}/403`);
+    }
     content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
   } else if (loading) {
     content = <Spinner center />;

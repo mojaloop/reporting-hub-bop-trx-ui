@@ -1423,10 +1423,10 @@
     vkbeautify "^0.99.3"
     whatwg-fetch "^3.0.0"
 
-"@modusbox/react-components@^0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@modusbox/react-components/-/react-components-0.1.7.tgz#1c74bce613bbccc35f913b3c96865a154260ad4b"
-  integrity sha512-FrM8v5PI6Ry7ZGzZgaQX7O8MYYi93xo47GvUcYTsOQoPb6jqbDIUbd68wXLUw6fotoMNswGgOkjSNn1HU+YQZQ==
+"@modusbox/react-components@0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@modusbox/react-components/-/react-components-0.1.9.tgz#f1699f4df450f0f829c980ba911643067ecb029c"
+  integrity sha512-jN8O3EE6SPkBmro0I2aepMnZiBsC+ru+c7EZhVZ259+okVhEodomzEhdDckGWtePVJzPlESFoJfdXj8Cle75+g==
   dependencies:
     "@modusbox/ts-utils" "^0.0.4"
     babel-plugin-react-docgen "^4.2.1"
@@ -10176,6 +10176,13 @@ react-base16-styling@^0.6.0:
     lodash.curry "^4.0.1"
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
+
+react-bootstrap-icons@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-icons/-/react-bootstrap-icons-1.6.1.tgz#253e6bf637c983edfb82af0554454a22c5937731"
+  integrity sha512-0xoFKK0soRBx7F0+R8lHmNp7THqaCMnAKm2SfySeTTmyk2HOG6SMXuoqlEI8SPZu2ez4u3dHlrXoo5/2IGWCeA==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-day-picker@7.1.9:
   version "7.1.9"
