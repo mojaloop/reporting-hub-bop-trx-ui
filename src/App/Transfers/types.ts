@@ -34,9 +34,9 @@ export enum DateRanges {
   PastTwentyFour = 'Past 24 Hours',
   Today = 'Today',
   PastFortyEight = 'Past 48 Hours',
-  OneWeek = '1 Week',
-  OneMonth = '1 Month',
-  OneYear = '1 Year',
+  PastWeek = 'Past Week',
+  PastMonth = 'Past Month',
+  PastYear = 'Past Year',
   Custom = 'Custom Range',
 }
 

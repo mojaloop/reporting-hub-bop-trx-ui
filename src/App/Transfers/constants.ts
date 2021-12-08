@@ -12,9 +12,9 @@ export const dateRanges = composeTableColumnOptions({
   [DateRanges.PastTwentyFour]: DateRanges.PastTwentyFour,
   [DateRanges.Today]: DateRanges.Today,
   [DateRanges.PastFortyEight]: DateRanges.PastFortyEight,
-  [DateRanges.OneWeek]: DateRanges.OneWeek,
-  [DateRanges.OneMonth]: DateRanges.OneMonth,
-  [DateRanges.OneYear]: DateRanges.OneYear,
+  [DateRanges.PastWeek]: DateRanges.PastWeek,
+  [DateRanges.PastMonth]: DateRanges.PastMonth,
+  [DateRanges.PastYear]: DateRanges.PastYear,
   [DateRanges.Custom]: DateRanges.Custom,
 });
 
@@ -33,5 +33,4 @@ export const transferStateOptions = composeTableColumnOptions({
   [TransferState.Aborted]: TransferState.Aborted,
   [TransferState.Committed]: TransferState.Committed,
   [TransferState.Reserved]: TransferState.Reserved,
-  [TransferState.Settled]: TransferState.Settled,
 });

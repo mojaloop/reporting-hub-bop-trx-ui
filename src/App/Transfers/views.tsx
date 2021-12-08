@@ -158,15 +158,15 @@ const DateFilters: FC<DateFiltersProps> = ({ model, onFilterChange, onClearFilte
               onFilterChange('from', fromDate(moment().subtract(2, 'days').toDate()));
               onFilterChange('to', fromDate(moment().toDate()));
             }
-            if (value === DateRanges.OneWeek) {
+            if (value === DateRanges.PastWeek) {
               onFilterChange('from', fromDate(moment().subtract(1, 'week').toDate()));
               onFilterChange('to', fromDate(moment().toDate()));
             }
-            if (value === DateRanges.OneMonth) {
+            if (value === DateRanges.PastMonth) {
               onFilterChange('from', fromDate(moment().subtract(1, 'month').toDate()));
               onFilterChange('to', fromDate(moment().toDate()));
             }
-            if (value === DateRanges.OneYear) {
+            if (value === DateRanges.PastYear) {
               onFilterChange('from', fromDate(moment().subtract(1, 'year').toDate()));
               onFilterChange('to', fromDate(moment().toDate()));
             }
@@ -305,6 +305,7 @@ const Transfers: FC<ConnectorProps> = ({
   const [getTransfers, { loading, error, data }] = useLazyQuery(
     filtersModel.transferId ? GET_TRANSFER : GET_TRANSFERS_WITH_EVENTS,
     {
+      fetchPolicy: 'no-cache',
       variables: filtersModel.transferId
         ? { transferId: filtersModel.transferId }
         : {

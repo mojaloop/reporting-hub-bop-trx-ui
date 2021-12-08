@@ -62,7 +62,7 @@ const TransferTotalSummary: FC<ConnectorProps> = ({ filtersModel }) => {
             compactDisplay: 'short',
           }).format(totalTransferCount)}
         />
-        <Text type="secondary">Total Transfers</Text>
+        <Text type="secondary">Total Successful Transfers</Text>
       </div>
     );
   }

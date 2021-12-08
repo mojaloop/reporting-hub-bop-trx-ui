@@ -23,6 +23,7 @@ module.exports = {
   // Class names are needed for integration testing of the production build
   // `testcafe-react-selector` needs these classnames to be present
   optimization: {
+    moduleIds: "deterministic",
     minimize: true,
     minimizer: [
       new TerserPlugin({
@@ -78,6 +79,9 @@ module.exports = {
     // `import.meta.url`, `document.currentScript`, `<script />`
     // or `self.location`.
     publicPath: 'auto',
+    // Hash files for cache busting
+    filename: '[name].[contenthash].js',
+    assetModuleFilename: "images/[hash][ext][query]",
   },
   resolve: {
     alias: {
