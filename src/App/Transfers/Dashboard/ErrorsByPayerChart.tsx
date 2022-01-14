@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
 import { ReduxContext, State, Dispatch } from 'store';
 import { TransferSummary } from 'apollo/types';
+import _ from 'lodash';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
@@ -36,7 +37,7 @@ const ByPayerChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
 
   const [activeIndex, setActiveIndex] = useState<number>();
 
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (pieData: any, index: number) => {
     setActiveIndex(index);
   };
 
@@ -50,12 +51,19 @@ const ByPayerChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   } else if (loading) {
     content = <Spinner center />;
   } else {
-    const summary = data.transferSummary
+    const prunedSummary = data.transferSummary
       .filter((obj: TransferSummary) => {
         return obj.errorCode !== null;
       })
-      .slice()
-      .sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
+      .slice();
+
+    const summary = _.map(_.groupBy(prunedSummary, 'payerDFSP'), (ts: any, payerDFSP: string) => {
+      return {
+        payerDFSP,
+        count: _.sumBy(ts, 'count'),
+      };
+    }).sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
+
     const firstThree = summary.slice(0, 3);
     const remainingSummary = {
       payerDFSP: 'Other',
