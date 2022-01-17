@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
 import { ReduxContext, State, Dispatch } from 'store';
 import { GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP } from 'apollo/query';
-import _ from 'lodash';
+import { map, groupBy, sumBy } from 'lodash';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
@@ -37,7 +37,7 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
 
   const [activeIndex, setActiveIndex] = useState<number>();
 
-  const onPieEnter = (pieData: any, index: number) => {
+  const onPieEnter = (_pieData: any, index: number) => {
     setActiveIndex(index);
   };
 
@@ -57,10 +57,10 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
       })
       .slice();
 
-    const summary = _.map(_.groupBy(prunedSummary, 'payerDFSP'), (ts: any, payeeDFSP: string) => {
+    const summary = map(groupBy(prunedSummary, 'payerDFSP'), (ts: any, payeeDFSP: string) => {
       return {
         payeeDFSP,
-        count: _.sumBy(ts, 'count'),
+        count: sumBy(ts, 'count'),
       };
     }).sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
 
