@@ -44,6 +44,165 @@ const TransferDetails: FC<ConnectorProps> = ({
     );
   }
 
+  const TransferDetailsTab = (
+    <TabPanel className="transferDetailsTab">
+      <FormField.Container direction="row" align="top left">
+        <FormField.Container direction="column">
+          <FormField disabled type="text" label="Transfer ID" value={transferDetails.transferId!} />
+          <FormField
+            disabled
+            type="text"
+            label="Amount"
+            value={transferDetails.amount?.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Source Amount"
+            value={transferDetails.amount?.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="FXP"
+            value={`${transferDetails.payerParty?.firstName || ''} ${
+              transferDetails.toString() || ''
+            }`}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payer Identifier"
+            value={`${transferDetails.payerParty?.firstName || ''} ${
+              transferDetails.payerParty?.lastName || ''
+            }`}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payee Identifier"
+            value={`${transferDetails.payeeParty?.firstName || ''} ${
+              transferDetails.toString() || ''
+            }`}
+          />
+        </FormField.Container>
+
+        <FormField.Container direction="column">
+          <FormField
+            disabled
+            type="text"
+            label="Transfer State"
+            value={transferDetails.transferState || ''}
+          />
+          <FormField disabled type="text" label="Currency" value={transferDetails.currency || ''} />
+          <FormField
+            disabled
+            type="text"
+            label="Source Currency"
+            value={transferDetails.currency || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Conversion Type"
+            value={transferDetails.settlementId?.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payer Identifier Type"
+            value={`${transferDetails.payerParty?.idType || ''} ${
+              transferDetails.payerParty?.idValue?.toString() || ''
+            }`}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payee Identifier Type"
+            value={`${transferDetails.payeeParty?.idType || ''} ${
+              transferDetails.payeeParty?.idValue?.toString() || ''
+            }`}
+          />
+        </FormField.Container>
+
+        <FormField.Container direction="column">
+          <FormField
+            disabled
+            type="text"
+            label="Base Use Case"
+            value={transferDetails.transactionType || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Submitted Date"
+            value={
+              transferDetails.createdAt ? moment(transferDetails.createdAt).local().format() : ''
+            }
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Conversion Submitted Date"
+            value={
+              transferDetails.createdAt ? moment(transferDetails.createdAt).local().format() : ''
+            }
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payer DFSP"
+            value={transferDetails.payerDFSP?.name?.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payee DFSP"
+            value={transferDetails.payeeDFSP?.name?.toString() || ''}
+          />
+        </FormField.Container>
+        <FormField.Container direction="column">
+          <FormField
+            disabled
+            type="text"
+            label="Transaction Type"
+            value={transferDetails.transactionType || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Transfer Settlement Batch ID"
+            value={transferDetails.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Conversion Settlement Batch ID"
+            value={transferDetails.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payer DFSP Proxy"
+            value={transferDetails.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="Payee DFSP Proxy"
+            value={transferDetails.toString() || ''}
+          />
+          <FormField
+            disabled
+            type="text"
+            label="FXP Proxy"
+            value={transferDetails.toString() || ''}
+          />
+        </FormField.Container>
+      </FormField.Container>
+    </TabPanel>
+  );
+
   const TechnicalDetailsTab = (
     <TabPanel className="technicalDetailsTab">
       <FormField.Container direction="row" align="top left">
@@ -240,8 +399,10 @@ const TransferDetails: FC<ConnectorProps> = ({
       <div>
         <Tabs>
           <Tab>Basic Information</Tab>
+          <Tab>Transfer Details</Tab>
           <Tab>Technical Details</Tab>
           {BasicInformationTab}
+          {TransferDetailsTab}
           {TechnicalDetailsTab}
         </Tabs>
       </div>
