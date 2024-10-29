@@ -1,32 +1,27 @@
-import { useQuery } from '@apollo/client';
-import { TransferSummary } from 'apollo/types';
-import { MessageBox, Spinner } from 'components';
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
-import { ReduxContext, State, Dispatch } from 'store';
-import { GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP } from 'apollo/query';
+import { ReduxContext, State } from 'store';
+import { MessageBox, Spinner } from 'components';
+import { useQuery } from '@apollo/client';
+import { TransferSummary } from 'apollo/types';
+import { GET_TRANSFER_SUMMARY } from 'apollo/query';
 import * as selectors from '../selectors';
-import { FilterChangeValue, TransfersFilter } from '../types';
-import { actions } from '../slice';
-import { GREEN_CHART_GRADIENT_COLORS, renderActiveShape, renderGreenLegend } from './utils';
+import { TransfersFilter } from '../types';
+import { RED_CHART_GRADIENT_COLORS, renderActiveShape, renderRedLegend } from './utils';
 
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
 });
 
-const dispatchProps = (dispatch: Dispatch) => ({
-  onFilterChange: (field: string, value: FilterChangeValue | string) =>
-    dispatch(actions.setTransferFinderFilter({ field, value })),
-});
+const dispatchProps = () => ({});
 
 interface ConnectorProps {
   filtersModel: TransfersFilter;
-  onFilterChange: (field: string, value: FilterChangeValue | string) => void;
 }
 
-const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
-  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP, {
+const BySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
+  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
     fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
@@ -45,6 +40,7 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   };
 
   let content = null;
+
   if (error) {
     content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
   } else if (loading) {
@@ -52,13 +48,13 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   } else {
     const summary = data.transferSummary
       .filter((obj: TransferSummary) => {
-        return obj.errorCode === null;
+        return obj.errorCode !== null;
       })
       .slice()
       .sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
     const firstThree = summary.slice(0, 3);
     const remainingSummary = {
-      payeeDFSP: 'Other',
+      errorCode: 'Other',
       count: summary.slice(3).reduce((n: number, { count }: TransferSummary) => n + count, 0),
     };
     if (remainingSummary.count > 0) {
@@ -66,30 +62,25 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
     }
 
     content = (
-      <PieChart id="TransfersByPayeeChart" width={300} height={120}>
+      <PieChart id="ErrorsBySourceCurrencyChart" width={300} height={120}>
         <Legend
-          id="TransfersByPayeeChartLegend"
-          name="Payee DFSP"
+          id="ErrorsBySourceCurrencyLegend"
+          name="Source Currency Code"
           layout="vertical"
           verticalAlign="middle"
           align="right"
           width={50}
           height={100}
           iconSize={0}
-          content={renderGreenLegend}
+          content={renderRedLegend}
         />
         <Pie
           data={firstThree}
           dataKey="count"
-          nameKey="payeeDFSP"
+          nameKey="errorCode"
           innerRadius={30}
           outerRadius={50}
           blendStroke
-          onClick={(value) => {
-            if (value.name !== 'Other') {
-              onFilterChange('payeeFSPId', value.name);
-            }
-          }}
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
           onMouseEnter={onPieEnter}
@@ -97,8 +88,8 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
         >
           {firstThree.map((_entry: any, index: number) => (
             <Cell
-              key={`${_entry.payeeDFSP}`}
-              fill={GREEN_CHART_GRADIENT_COLORS[index % GREEN_CHART_GRADIENT_COLORS.length]}
+              key={`${_entry.errorCode}`}
+              fill={RED_CHART_GRADIENT_COLORS[index % RED_CHART_GRADIENT_COLORS.length]}
             />
           ))}
         </Pie>
@@ -109,4 +100,6 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   return content;
 };
 
-export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(ByPayeeChart);
+export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(
+  BySourceCurrencyChart,
+);

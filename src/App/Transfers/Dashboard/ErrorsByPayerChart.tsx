@@ -77,7 +77,7 @@ const ByPayerChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
       <PieChart id="ErrorsByPayerChart" width={300} height={120}>
         <Legend
           id="ErrorsByPayerChartLegend"
-          name="By Payer"
+          name="Payer"
           layout="vertical"
           verticalAlign="middle"
           align="right"
