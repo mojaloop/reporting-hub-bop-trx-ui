@@ -1,15 +1,16 @@
 import { useQuery } from '@apollo/client';
-import { TransferSummary } from 'apollo/types';
+import { GET_TRANSFER_SUMMARY_BY_PAYER_DFSP } from 'apollo/query';
 import { MessageBox, Spinner } from 'components';
 import React, { FC, useState } from 'react';
 import { connect } from 'react-redux';
 import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
 import { ReduxContext, State, Dispatch } from 'store';
-import { GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP } from 'apollo/query';
-import * as selectors from '../selectors';
+import { TransferSummary } from 'apollo/types';
+import { map, groupBy, sumBy } from 'lodash';
 import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
-import { GREEN_CHART_GRADIENT_COLORS, renderActiveShape, renderGreenLegend } from './utils';
+import * as selectors from '../selectors';
+import { RED_CHART_GRADIENT_COLORS, renderActiveShape, renderRedLegend } from './utils';
 
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
@@ -25,8 +26,8 @@ interface ConnectorProps {
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
 }
 
-const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
-  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP, {
+const ByTargetCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
+  const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYER_DFSP, {
     fetchPolicy: 'no-cache',
     variables: {
       startDate: filtersModel.from,
@@ -36,7 +37,7 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
 
   const [activeIndex, setActiveIndex] = useState<number>();
 
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (_pieData: any, index: number) => {
     setActiveIndex(index);
   };
 
@@ -50,15 +51,22 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   } else if (loading) {
     content = <Spinner center />;
   } else {
-    const summary = data.transferSummary
+    const prunedSummary = data.transferSummary
       .filter((obj: TransferSummary) => {
-        return obj.errorCode === null;
+        return obj.errorCode !== null;
       })
-      .slice()
-      .sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
+      .slice();
+
+    const summary = map(groupBy(prunedSummary, 'payerDFSP'), (ts: any, payerDFSP: string) => {
+      return {
+        payerDFSP,
+        count: sumBy(ts, 'count'),
+      };
+    }).sort((a: TransferSummary, b: TransferSummary) => b.count - a.count);
+
     const firstThree = summary.slice(0, 3);
     const remainingSummary = {
-      payeeDFSP: 'Other',
+      payerDFSP: 'Other',
       count: summary.slice(3).reduce((n: number, { count }: TransferSummary) => n + count, 0),
     };
     if (remainingSummary.count > 0) {
@@ -66,28 +74,28 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
     }
 
     content = (
-      <PieChart id="TransfersByPayeeChart" width={300} height={120}>
+      <PieChart id="ErrorsByTargetCurrencyChart" width={300} height={120}>
         <Legend
-          id="TransfersByPayeeChartLegend"
-          name="Payee DFSP"
+          id="ErrorsByTargetCurrencyChartLegend"
+          name="Target Currency"
           layout="vertical"
           verticalAlign="middle"
           align="right"
           width={50}
           height={100}
           iconSize={0}
-          content={renderGreenLegend}
+          content={renderRedLegend}
         />
         <Pie
           data={firstThree}
           dataKey="count"
-          nameKey="payeeDFSP"
+          nameKey="payerDFSP"
           innerRadius={30}
           outerRadius={50}
           blendStroke
           onClick={(value) => {
             if (value.name !== 'Other') {
-              onFilterChange('payeeFSPId', value.name);
+              onFilterChange('payerFSPId', value.name);
             }
           }}
           activeIndex={activeIndex}
@@ -97,8 +105,8 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
         >
           {firstThree.map((_entry: any, index: number) => (
             <Cell
-              key={`${_entry.payeeDFSP}`}
-              fill={GREEN_CHART_GRADIENT_COLORS[index % GREEN_CHART_GRADIENT_COLORS.length]}
+              key={`${_entry.payerDFSP}`}
+              fill={RED_CHART_GRADIENT_COLORS[index % RED_CHART_GRADIENT_COLORS.length]}
             />
           ))}
         </Pie>
@@ -109,4 +117,6 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   return content;
 };
 
-export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(ByPayeeChart);
+export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(
+  ByTargetCurrencyChart,
+);
