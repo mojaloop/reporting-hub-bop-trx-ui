@@ -6,7 +6,7 @@ There is a precise approach on how to contribute to this project and there are s
 - [Unit testing the code](#unit-testing-the-code)
 - [Versioning strategy](#versioning-strategy)
 
-### Pushing to the repo 
+### Pushing to the repo
 
 When adding changes to the repo, make sure the following rules are respected:
 
@@ -40,7 +40,7 @@ Views, routes, pages should be tested for assuring the right children components
 
 ### Versioning Strategy
 
-Versioning is done via `yarn version`. 
+Versioning is done via `yarn version`.
 
 > :warning: Changing the version should be done in the last commit of a branch/PR.
 

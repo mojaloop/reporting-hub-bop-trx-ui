@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 networks:
   mojaloop-net:
@@ -16,7 +16,7 @@ services:
       - REACT_APP_API_BASE_URL=http://localhost:3009/
       - REACT_APP_MOCK_API=true
     ports:
-      - "8082:8082"
+      - '8082:8082'
     networks:
       - mojaloop-net
     healthcheck:

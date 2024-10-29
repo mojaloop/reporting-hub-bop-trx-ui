@@ -9,7 +9,7 @@ Configuration settings are described in [configuring the tools](./configuring-th
 
 ### Styling
 
-The project uses the BEM naming convention. More about [BEM](http://getbem.com/). 
+The project uses the BEM naming convention. More about [BEM](http://getbem.com/).
 Style modules can be either plain CSS or SCSS.
 
 ### Typescript

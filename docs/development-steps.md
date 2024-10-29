@@ -26,11 +26,8 @@ At this point you should iterate over the last steps and do the following:
 
 ### Commit and push
 
-It's a good practice to commit and push your changes frequently. 
+It's a good practice to commit and push your changes frequently.
 
 Pre-commit and pre-push git hooks have been setup to help identify and catch issues **locally** ahead of time; changes breaking tests won't be allowed to be pushed to the remote git repo.
 
 Additionally, a proper CI is setup using github actions.
-
-
-

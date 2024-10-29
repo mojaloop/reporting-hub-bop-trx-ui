@@ -6,13 +6,13 @@ metadata:
   name: reporting-hub-bop-trx-ui
 spec:
   rules:
-  - http:
-      paths:
-      - path: /()(.*)
-        backend:
-          serviceName: reporting-hub-bop-trx-ui
-          servicePort: http
-      - path: /reporting-api(/|$)(.*)
-        backend:
-          serviceName: bof-reporting-hub-bop-api-svc
-          servicePort: 80
+    - http:
+        paths:
+          - path: /()(.*)
+            backend:
+              serviceName: reporting-hub-bop-trx-ui
+              servicePort: http
+          - path: /reporting-api(/|$)(.*)
+            backend:
+              serviceName: bof-reporting-hub-bop-api-svc
+              servicePort: 80

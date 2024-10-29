@@ -47,7 +47,7 @@ module.exports = {
     'react/no-unescaped-entities': 'off',
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-wrap-multilines': 'off',
-    'react/destructuring-assignment': 'off'
+    'react/destructuring-assignment': 'off',
   },
   overrides: [
     {

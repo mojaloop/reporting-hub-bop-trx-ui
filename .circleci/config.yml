@@ -160,7 +160,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - dependency-cache-{{ checksum "yarn.lock" }}
+            - dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: Configure git + ssh
           command: |
@@ -211,7 +211,7 @@ jobs:
           description: ${RELEASE_CHANGES}
           file-path: CHANGELOG.md
       - slack/status:
-          webhook: "$SLACK_WEBHOOK_ANNOUNCEMENT"
+          webhook: '$SLACK_WEBHOOK_ANNOUNCEMENT'
           success_message: '*"${CIRCLE_PROJECT_REPONAME}"* - Release \`"v${RELEASE_TAG}"\` \nhttps://github.com/mojaloop/"${CIRCLE_PROJECT_REPONAME}"/releases/tag/"v${RELEASE_TAG}"'
 
   publish:
@@ -244,7 +244,7 @@ jobs:
             docker push $DOCKER_ORG/$CIRCLE_PROJECT_REPONAME:${CIRCLE_TAG}
       - slack/status:
           fail_only: true
-          webhook: "$SLACK_WEBHOOK_ANNOUNCEMENT_CI_CD"
+          webhook: '$SLACK_WEBHOOK_ANNOUNCEMENT_CI_CD'
           failure_message: 'Publishing docker image failed for: \`"${DOCKER_ORG}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}"\`'
 
   #license-scan:
