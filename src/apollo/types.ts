@@ -89,10 +89,75 @@ export type Transfer = {
   payeeDFSP?: Maybe<DFSP>;
   payerParty?: Maybe<Party>;
   payeeParty?: Maybe<Party>;
+  transferTerms?: Maybe<TransferTerms>;
+  conversions?: Maybe<Conversion>;
+  conversionTerms?: Maybe<ConversionTerms>;
+  fxQuotes?: Maybe<Amount>;
+  fxTransfers?: Maybe<Amount>;
   partyLookupEvents?: Maybe<Scalars['JSONObject']>;
   quoteEvents?: Maybe<Scalars['JSONObject']>;
   transferEvents?: Maybe<Scalars['JSONObject']>;
   settlementEvents?: Maybe<Scalars['JSONObject']>;
+};
+
+export type TransferTerms = {
+  quoteAmount?: Maybe<Amount>;
+  quoteAmountType?: Maybe<Scalars['String']>;
+  transferAmount?: Maybe<Amount>;
+  payeeReceiveAmount?: Maybe<Amount>;
+  payeeFspCommission?: Maybe<Amount>;
+  expirationDate?: Maybe<Scalars['DateTimeFlexible']>;
+  geoCode?: Maybe<GeoCode>;
+  ilpPacket?: Maybe<Scalars['Currency']>;
+};
+
+export type Conversion = {
+  conversionRequestId?: Maybe<Scalars['String']>;
+  conversionId?: Maybe<Scalars['String']>;
+  conversionCommitRequestId?: Maybe<Scalars['String']>;
+  conversionState?: Maybe<Scalars['String']>;
+  conversionStateChanges?: Maybe<ConversionStateChanges>;
+  counterPartyFSP?: Maybe<Scalars['String']>;
+  conversionSettlementWindowId?: Maybe<Scalars['Int']>;
+  conversionType?: Maybe<Scalars['String']>;
+};
+
+export type ConversionTerms = {
+  determiningTransferId?: Maybe<Scalars['String']>;
+  initiatingFsp?: Maybe<Scalars['String']>;
+  counterPartyFsp?: Maybe<Scalars['String']>;
+  amountType?: Maybe<Scalars['String']>;
+  transferAmount?: Maybe<TransferAmount>;
+  expiration?: Maybe<Scalars['DateTimeFlexible']>;
+  charges?: Maybe<Charges>;
+  ilpPacket?: Maybe<Scalars['String']>;
+  conversionIdRef?: Maybe<Scalars['Int']>;
+};
+
+export type Amount = {
+  amount?: Maybe<Scalars['Int']>;
+  currency?: Maybe<Scalars['Currency']>;
+};
+
+export type GeoCode = {
+  latitude?: Maybe<Scalars['String']>;
+  longitude?: Maybe<Scalars['String']>;
+};
+
+export type ConversionStateChanges = {
+  conversionState?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['DateTimeFlexible']>;
+  reason?: Maybe<Scalars['String']>;
+};
+
+export type TransferAmount = {
+  sourceAmount?: Maybe<Amount>;
+  TargetAmount?: Maybe<Amount>;
+};
+
+export type Charges = {
+  totalSourceCurrencyCharges?: Maybe<Amount>;
+  totalTargetCurrencyCharges?: Maybe<Amount>;
 };
 
 export enum TransactionType {
