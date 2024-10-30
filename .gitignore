@@ -17,6 +17,7 @@ npm-debug.log
 .DS_Store
 .tern-port
 .idea
+.yarn
 
 .editor-config
 yarn-error.log
