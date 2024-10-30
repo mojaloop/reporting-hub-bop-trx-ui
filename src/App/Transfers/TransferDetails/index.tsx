@@ -241,7 +241,6 @@ const TransferDetails: FC<ConnectorProps> = ({
         <Tabs>
           <Tab>Basic Information</Tab>
           <Tab>Technical Details</Tab>
-          <Tab>Transfer Terms</Tab>
           {BasicInformationTab}
           {TechnicalDetailsTab}
         </Tabs>
