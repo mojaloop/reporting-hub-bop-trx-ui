@@ -44,7 +44,7 @@ const transfersColumns = [
   },
   {
     label: 'Source Currency',
-    key: 'currency',
+    key: 'sourceCurrency',
   },
   {
     label: 'Currency',
@@ -243,8 +243,8 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
           className="transfers__filters__textfield"
           placeholder="Transaction Type"
           size="small"
-          value={model?.payerIdValue}
-          onChange={(value) => onFilterChange('payerIdValue', value)}
+          value={model?.transactionType}
+          onChange={(value) => onFilterChange('transactionType', value)}
         />
       </div>
       <div className="transfers__filters__filter-row">
@@ -276,8 +276,8 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
           className="transfers__filters__textfield"
           placeholder="Conversion State"
           size="small"
-          value={model?.payeeIdValue}
-          onChange={(value) => onFilterChange('payeeIdValue', value)}
+          value={model?.conversionState}
+          onChange={(value) => onFilterChange('conversionState', value)}
         />
       </div>
       <div className="transfers__filters__filter-row">
@@ -285,8 +285,8 @@ const Filters: FC<TransferFiltersProps> = ({ model, onFilterChange, onFindTransf
           className="transfers__filters__textfield"
           placeholder="Source Currency"
           size="small"
-          value={model?.currency}
-          onChange={(value) => onFilterChange('currency', value)}
+          value={model?.sourceCurrency}
+          onChange={(value) => onFilterChange('sourceCurrency', value)}
         />
         <TextField
           className="transfers__filters__textfield"
