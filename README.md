@@ -56,7 +56,6 @@ Security measures are applied to the repository so that it is protected from (so
 
 For detailed instructions on how to contribute, please read the [contribution rules](./docs/contribution-rules.md) page.
 
-
 ## How to deploy
 
 The app is configured to run in a docker image served by an embedded webserver; that makes it portable and convenient when has to run in a kuberneters environment.

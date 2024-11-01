@@ -13,10 +13,10 @@ spec:
         app.kubernetes.io/name: reporting-hub-bop-trx-ui
     spec:
       containers:
-      - name: app
-        image: ghcr.io/mojaloop/reporting-hub-bop-trx-ui:v0.0.0
-        ports:
-        - containerPort: 8082
-        env:
-          - name: REACT_APP_API_BASE_URL
-            value: /reporting-api
+        - name: app
+          image: ghcr.io/mojaloop/reporting-hub-bop-trx-ui:v0.0.0
+          ports:
+            - containerPort: 8082
+          env:
+            - name: REACT_APP_API_BASE_URL
+              value: /reporting-api

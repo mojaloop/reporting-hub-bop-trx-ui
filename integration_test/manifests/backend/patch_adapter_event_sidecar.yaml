@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: ml-api-adapter-service-sidecar
-          image: "mojaloop/event-sidecar:v11.0.1"
+          image: 'mojaloop/event-sidecar:v11.0.1'
           imagePullPolicy: IfNotPresent
           command:
             - npm
@@ -32,17 +32,17 @@ spec:
               mountPath: /opt/event-sidecar/config
           env:
             - name: LOG_LEVEL
-              value: "info"
+              value: 'info'
             - name: LOG_FILTER
-              value: "error, warn, info"
+              value: 'error, warn, info'
             - name: EVENT_SDK_LOG_FILTER
-              value: "audit:*, log:info, log:warn, log:error"
+              value: 'audit:*, log:info, log:warn, log:error'
             - name: EVENT_SDK_LOG_METADATA_ONLY
-              value: "true"
+              value: 'true'
       volumes:
         - name: ml-api-adapter-service-sidecar-volume
           configMap:
             name: ml-api-adapter-service-sidecar
             items:
-            - key: default.json
-              path: default.json
+              - key: default.json
+                path: default.json

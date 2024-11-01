@@ -80,6 +80,9 @@ export const TransferMock = Factory.Sync.makeFactory<Transfer>({
   payeeDFSP: Factory.each(() => DfspMock.build()),
   payerParty: Factory.each(() => PartyMock.build()),
   payeeParty: Factory.each(() => PartyMock.build()),
+  sourceCurrency: Factory.each(() =>
+    faker.random.arrayElement(['USD', 'EUR', 'CNY', 'MMK', 'TZS']),
+  ),
   quoteEvents: Factory.each(() => {
     return JSON.parse(JSON.stringify({ data: faker.datatype.string(1000) }));
   }),

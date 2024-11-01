@@ -11,7 +11,10 @@ export interface TransfersFilter {
   from: string | undefined;
   to: string | undefined;
   currency: string | undefined;
+  transactionType: string | undefined;
   transferState: string | undefined;
+  conversionState: string | undefined;
+  sourceCurrency: string | undefined;
   timeframeSelect: string;
 }
 

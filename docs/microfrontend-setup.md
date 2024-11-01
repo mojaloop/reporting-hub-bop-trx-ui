@@ -10,7 +10,6 @@ It is responsible to export the children modules/app which will be loaded at run
 - [Webpack Module Federation](#webpack-module-federation)
 - [Loading Children Modules](#loading-children-modules)
 
-
 ### Isolation And Defined Boundary
 
 - [Choosing A Unique Name](#choosing-a-unique-name)
@@ -22,11 +21,11 @@ It is responsible to export the children modules/app which will be loaded at run
 It's important to note the remote has to use a unique name in order to work and not collide with other sibling remotes.
 
 The suggested practice is use such name as:
+
 - Git repository
 - Webpack Module Federation [configuration](#webpack-module-federation)
 - Module (package.json) name
 - CSS wrapper name
-
 
 #### Custom Redux Context
 
@@ -38,7 +37,7 @@ For such reason, the store module (`src/store`) exports a custom React Context t
 import configureStore, { ReduxContext } from './store';
 ///
 ///
-function ExportableApp({ ...propsFromTheHost, }) {
+function ExportableApp({ ...propsFromTheHost }) {
   return (
     <Provider store={store} context={ReduxContext}>
       <App {...propsFromTheHost} />
@@ -70,6 +69,7 @@ function ExportableModule() {
 ```
 
 And defined the style accordingly in SCSS (CSS can work too)
+
 ```scss
 .uniquely-chosen-remote-name {
   .header {
@@ -83,7 +83,6 @@ And defined the style accordingly in SCSS (CSS can work too)
   }
 }
 ```
-
 
 ### Webpack Module Federation
 
@@ -141,10 +140,9 @@ Make sure you set the unique name in the following fields:
 - `ModuleFederationPlugin.library.name`
 - `ModuleFederationPlugin.filename`
 
-
 #### Resources
 
- - https://webpack.js.org/concepts/module-federation/
- - https://github.com/module-federation/module-federation-examples
- - https://github.com/modusintegration/microfrontend-shell-boilerplate
- - https://jamstack.org/
+- https://webpack.js.org/concepts/module-federation/
+- https://github.com/module-federation/module-federation-examples
+- https://github.com/modusintegration/microfrontend-shell-boilerplate
+- https://jamstack.org/

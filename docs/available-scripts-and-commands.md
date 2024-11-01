@@ -1,11 +1,12 @@
 ## Available Scripts and Commands
 
 ### Scripts
+
 In the project directory, you can run:
 
 #### `yarn start`
 
-Runs the app in the development mode over HTTPS.<br /> 
+Runs the app in the development mode over HTTPS.<br />
 Open [https://localhost:3000](https://localhost:3000) to view it in the browser.
 
 **Note:** Self Signed Certificates are being used in dev mode; you are required to explicitely allow the browser to navigate to the page.

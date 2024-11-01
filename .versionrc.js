@@ -1,5 +1,6 @@
 module.exports = {
-  header: '# Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)',
+  header:
+    '# Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)',
   types: [
     { type: 'feat', section: 'Features' },
     { type: 'fix', section: 'Bug Fixes' },
@@ -9,6 +10,6 @@ module.exports = {
     { type: 'style', section: 'Style Improvements' },
     { type: 'refactor', section: 'Code Refactor' },
     { type: 'perf', section: 'Performance' },
-    { type: 'test', section: 'Tests' }
-  ]
-}
+    { type: 'test', section: 'Tests' },
+  ],
+};

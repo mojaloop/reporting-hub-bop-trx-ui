@@ -93,6 +93,7 @@ export type Transfer = {
   quoteEvents?: Maybe<Scalars['JSONObject']>;
   transferEvents?: Maybe<Scalars['JSONObject']>;
   settlementEvents?: Maybe<Scalars['JSONObject']>;
+  sourceCurrency: Maybe<Scalars['String']>;
 };
 
 export enum TransactionType {

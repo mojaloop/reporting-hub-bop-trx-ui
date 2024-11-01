@@ -7,16 +7,16 @@
 
 global:
   adminApiSvc:
-    host: "centralledger-service"
+    host: 'centralledger-service'
     port: 80
   keto:
-    readURL: "http://keto-read:80"
-    writeURL: "http://keto-write:80"
+    readURL: 'http://keto-read:80'
+    writeURL: 'http://keto-write:80'
   wso2:
     identityServer:
-      host: "wso2-identity-server.local"
+      host: 'wso2-identity-server.local'
       port: 9443
-      userListURL: "http://wso2-identity-server.local:9443/scim2/Users"
+      userListURL: 'http://wso2-identity-server.local:9443/scim2/Users'
       user: 'admin'
       secret:
         name: wso2-is-admin-creds
@@ -55,11 +55,13 @@ role-assignment-service:
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /$2
   configFiles:
-    default.json: {
-        "ROLES_LIST": [
-          "USER_ROLE_abc7a2fd-4acf-4547-a194-1673f63eb37c",
-          "ADMIN_ROLE_6c1ec084-86d4-4915-ba81-6c59b87a65a6"
-        ]
+    default.json:
+      {
+        'ROLES_LIST':
+          [
+            'USER_ROLE_abc7a2fd-4acf-4547-a194-1673f63eb37c',
+            'ADMIN_ROLE_6c1ec084-86d4-4915-ba81-6c59b87a65a6',
+          ],
       }
 
 reporting-hub-bop-api-svc:
