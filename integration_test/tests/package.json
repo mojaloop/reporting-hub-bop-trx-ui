@@ -13,6 +13,7 @@
     "@types/ws": "^6.0.4",
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
+    "e2e-ui-tests": "file:",
     "env-var": "^7.0.1",
     "mojaloop-voodoo-client": "0.7.0",
     "request": "2.88.2",
