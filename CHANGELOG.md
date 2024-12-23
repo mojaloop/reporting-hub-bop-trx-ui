@@ -1,5 +1,4 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
-
 ### [1.7.3](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.7.2...v1.7.3) (2024-10-25)
 
 ### [1.7.2](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.7.1...v1.7.2) (2022-01-17)
