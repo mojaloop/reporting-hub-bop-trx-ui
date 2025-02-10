@@ -13,11 +13,15 @@ import { RED_CHART_GRADIENT_COLORS, renderActiveShape, renderRedLegend } from '.
 const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
 });
+
 const dispatchProps = () => ({});
+
 interface ConnectorProps {
   filtersModel: TransfersFilter;
+  onError: (component: string, error: any) => void;
 }
-const BySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
+
+const ErrorsByTargetCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onError }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
     fetchPolicy: 'no-cache',
     variables: {
@@ -25,17 +29,28 @@ const BySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
       endDate: filtersModel.to,
     },
   });
+
   const [activeIndex, setActiveIndex] = useState<number>();
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };
+
   const onPieLeave = () => {
     setActiveIndex(undefined);
   };
   let content = null;
   if (error) {
-    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
-  } else if (loading) {
+    const status = (error.networkError as { statusCode?: number })?.statusCode;
+    const isForbidden = status === 403;
+    onError('ErrorsByTargetCurrencyChart', error);
+
+    return (
+      <MessageBox kind={isForbidden ? 'default' : 'danger'}>
+        {isForbidden ? 'Restricted Access' : `Error fetching transfers: ${error.message}`}
+      </MessageBox>
+    );
+  }
+  if (loading) {
     content = <Spinner center />;
   } else {
     const summary = data.transferSummary
@@ -92,5 +107,5 @@ const BySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
 };
 
 export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(
-  BySourceCurrencyChart,
+  ErrorsByTargetCurrencyChart,
 );

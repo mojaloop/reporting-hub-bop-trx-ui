@@ -14,10 +14,13 @@ const stateProps = (state: State) => ({
   filtersModel: selectors.getTransfersFilter(state),
 });
 const dispatchProps = () => ({});
+
 interface ConnectorProps {
   filtersModel: TransfersFilter;
+  onError: (component: string, error: any) => void;
 }
-const BySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
+
+const ErrorsBySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onError }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
     fetchPolicy: 'no-cache',
     variables: {
@@ -32,9 +35,18 @@ const BySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
   const onPieLeave = () => {
     setActiveIndex(undefined);
   };
+
   let content = null;
   if (error) {
-    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
+    const status = (error.networkError as { statusCode?: number })?.statusCode;
+
+    const isForbidden = status === 403;
+    onError('ErrorsBySourceCurrencyChart', error);
+    content = (
+      <MessageBox kind={isForbidden ? 'default' : 'danger'}>
+        {isForbidden ? 'Restricted Access' : `Error fetching transfers: ${error.message}`}
+      </MessageBox>
+    );
   } else if (loading) {
     content = <Spinner center />;
   } else {
@@ -91,5 +103,5 @@ const BySourceCurrencyChart: FC<ConnectorProps> = ({ filtersModel }) => {
   return content;
 };
 export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(
-  BySourceCurrencyChart,
+  ErrorsBySourceCurrencyChart,
 );

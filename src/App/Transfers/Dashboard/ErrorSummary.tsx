@@ -25,9 +25,10 @@ const dispatchProps = (dispatch: Dispatch) => ({
 interface ConnectorProps {
   filtersModel: TransfersFilter;
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
+  onError: (component: string, error: any) => void;
 }
 
-const ErrorSummary: FC<ConnectorProps> = ({ filtersModel }) => {
+const ErrorSummary: FC<ConnectorProps> = ({ filtersModel, onError }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
     fetchPolicy: 'no-cache',
     variables: {
@@ -39,7 +40,14 @@ const ErrorSummary: FC<ConnectorProps> = ({ filtersModel }) => {
   let content = null;
 
   if (error) {
-    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
+    const status = (error.networkError as { statusCode?: number })?.statusCode;
+    onError('ErrorSummaryChart', error);
+    const isForbidden = status === 403;
+    content = (
+      <MessageBox kind={isForbidden ? 'default' : 'danger'}>
+        {isForbidden ? 'Restricted Access' : `Error fetching transfers: ${error.message}`}
+      </MessageBox>
+    );
   } else if (loading) {
     content = <Spinner center />;
   } else {

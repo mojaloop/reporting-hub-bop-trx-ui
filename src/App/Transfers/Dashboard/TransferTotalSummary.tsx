@@ -6,8 +6,7 @@ import { MessageBox, Spinner } from 'components';
 import { useQuery } from '@apollo/client';
 import { TransferSummary } from 'apollo/types';
 import { Statistic, Typography } from 'antd';
-import { useRouteMatch, useHistory } from 'react-router-dom';
-import { ErrorMessage, FilterChangeValue, TransfersFilter } from '../types';
+import { FilterChangeValue, TransfersFilter } from '../types';
 import { actions } from '../slice';
 import * as selectors from '../selectors';
 
@@ -25,9 +24,10 @@ const dispatchProps = (dispatch: Dispatch) => ({
 interface ConnectorProps {
   filtersModel: TransfersFilter;
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
+  onError: (component: string, error: any) => void;
 }
 
-const TransferTotalSummary: FC<ConnectorProps> = ({ filtersModel }) => {
+const TransferTotalSummary: FC<ConnectorProps> = ({ filtersModel, onError }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY, {
     fetchPolicy: 'no-cache',
     variables: {
@@ -37,13 +37,15 @@ const TransferTotalSummary: FC<ConnectorProps> = ({ filtersModel }) => {
   });
   let content = null;
   if (error) {
-    if (error.message === ErrorMessage.NOT_ALLOWED) {
-      const match = useRouteMatch();
-      const history = useHistory();
-      const path = match.url === '/' ? '' : match.url;
-      history.push(`${path}/403`);
-    }
-    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
+    const status = (error.networkError as { statusCode?: number })?.statusCode;
+
+    const isForbidden = status === 403;
+    onError('TransferTotalSummary', error);
+    content = (
+      <MessageBox kind={isForbidden ? 'default' : 'danger'}>
+        {isForbidden ? 'Restricted Access' : `Error fetching transfers: ${error.message}`}
+      </MessageBox>
+    );
   } else if (loading) {
     content = <Spinner center />;
   } else {

@@ -24,9 +24,14 @@ const dispatchProps = (dispatch: Dispatch) => ({
 interface ConnectorProps {
   filtersModel: TransfersFilter;
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
+  onError: (component: string, error: any) => void;
 }
 
-const ByTargetCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
+const TransfersByTargetCurrencyChart: FC<ConnectorProps> = ({
+  filtersModel,
+  onFilterChange,
+  onError,
+}) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_TARGET_CURRENCY, {
     fetchPolicy: 'no-cache',
     variables: {
@@ -46,9 +51,16 @@ const ByTargetCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChang
   };
 
   let content = null;
-
   if (error) {
-    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
+    const status = (error.networkError as { statusCode?: number })?.statusCode;
+
+    const isForbidden = status === 403;
+    onError('TransfersByTargetCurrencyChart', error);
+    content = (
+      <MessageBox kind={isForbidden ? 'default' : 'danger'}>
+        {isForbidden ? 'Restricted Access' : `Error fetching transfers: ${error.message}`}
+      </MessageBox>
+    );
   } else if (loading) {
     content = <Spinner center />;
   } else {
@@ -141,5 +153,5 @@ const ByTargetCurrencyChart: FC<ConnectorProps> = ({ filtersModel, onFilterChang
 };
 
 export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(
-  ByTargetCurrencyChart,
+  TransfersByTargetCurrencyChart,
 );

@@ -26,6 +26,7 @@ import TransferDetailsModal from './TransferDetails';
 import JsonModal from './JsonModal';
 import PartyModal from './PartyModal';
 import Dashboard from './Dashboard';
+import ErrorMessageModal from './ErrorMessageModal';
 import { dateRanges, partyIdTypeOptions, transferStateOptions } from './constants';
 
 const { Panel } = Collapse;
@@ -354,9 +355,17 @@ const Transfers: FC<ConnectorProps> = ({
           },
     },
   );
-
   if (error) {
-    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
+    const status = (error.networkError as { statusCode?: number })?.statusCode;
+    const isForbidden = status === 403;
+    content = isForbidden ? (
+      <ErrorMessageModal
+        errorTitle="Restricted Access"
+        errorMessage="You do not have permission to view this data"
+      />
+    ) : (
+      <MessageBox kind="danger">{`Error fetching transfers: ${error.message}`}</MessageBox>
+    );
   } else if (loading) {
     content = <Spinner center />;
   } else {
@@ -415,7 +424,7 @@ const Transfers: FC<ConnectorProps> = ({
       />
       <Collapse defaultActiveKey={['1']}>
         <Panel header="Overview for Date Range" key={1}>
-          <Dashboard />
+          <Dashboard filtersModel={filtersModel} />
         </Panel>
       </Collapse>
       <Collapse defaultActiveKey={['1']}>

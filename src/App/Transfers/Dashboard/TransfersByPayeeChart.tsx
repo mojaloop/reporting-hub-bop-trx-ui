@@ -24,9 +24,10 @@ const dispatchProps = (dispatch: Dispatch) => ({
 interface ConnectorProps {
   filtersModel: TransfersFilter;
   onFilterChange: (field: string, value: FilterChangeValue | string) => void;
+  onError: (component: string, error: any) => void;
 }
 
-const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
+const TransfersByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange, onError }) => {
   const { loading, error, data } = useQuery(GET_TRANSFER_SUMMARY_BY_PAYEE_DFSP, {
     fetchPolicy: 'no-cache',
     variables: {
@@ -47,7 +48,15 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
 
   let content = null;
   if (error) {
-    content = <MessageBox kind="danger">Error fetching transfers: {error.message}</MessageBox>;
+    const status = (error.networkError as { statusCode?: number })?.statusCode;
+    onError('TransferByPayeeChart', error);
+
+    const isForbidden = status === 403;
+    content = (
+      <MessageBox kind={isForbidden ? 'default' : 'danger'}>
+        {isForbidden ? 'Restricted Access' : `Error fetching transfers: ${error.message}`}
+      </MessageBox>
+    );
   } else if (loading) {
     content = <Spinner center />;
   } else {
@@ -119,4 +128,6 @@ const ByPayeeChart: FC<ConnectorProps> = ({ filtersModel, onFilterChange }) => {
   return content;
 };
 
-export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(ByPayeeChart);
+export default connect(stateProps, dispatchProps, null, { context: ReduxContext })(
+  TransfersByPayeeChart,
+);
