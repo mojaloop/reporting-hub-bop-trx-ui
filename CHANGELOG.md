@@ -1,4 +1,11 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
+### [2.0.2](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v2.0.0...v2.0.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* support read only root filesystem ([#69](https://github.com/mojaloop/reporting-hub-bop-trx-ui/issues/69)) ([8813a9b](https://github.com/mojaloop/reporting-hub-bop-trx-ui/commit/8813a9b1f07f7f3ebde0fd70cf7dd4c547cfefde))
+
 ### [1.7.4](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.7.3...v1.7.4) (2024-12-24)
 
 ### [1.7.3](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v1.7.2...v1.7.3) (2024-10-25)
