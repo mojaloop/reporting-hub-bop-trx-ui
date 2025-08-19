@@ -1,4 +1,11 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
+### [2.0.4](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v2.0.3...v2.0.4) (2025-08-19)
+
+
+### Bug Fixes
+
+* add ui path that can be checked by RBAC ([#72](https://github.com/mojaloop/reporting-hub-bop-trx-ui/issues/72)) ([01fb921](https://github.com/mojaloop/reporting-hub-bop-trx-ui/commit/01fb9214e30d19ab5ffe97688e3a0518218d2194))
+
 ### [2.0.3](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v2.0.2...v2.0.3) (2025-08-19)
 
 
