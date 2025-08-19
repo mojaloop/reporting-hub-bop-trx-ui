@@ -1,4 +1,11 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
+### [2.0.6](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v2.0.5...v2.0.6) (2025-08-19)
+
+
+### Bug Fixes
+
+* ensure proper fallback for missing files in nginx configuration ([#74](https://github.com/mojaloop/reporting-hub-bop-trx-ui/issues/74)) ([220d71e](https://github.com/mojaloop/reporting-hub-bop-trx-ui/commit/220d71ed503ee46e9fdf11a11879bfa9ce48ae7c))
+
 ### [2.0.5](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v2.0.4...v2.0.5) (2025-08-19)
 
 
