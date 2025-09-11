@@ -1,4 +1,11 @@
 # Changelog: [mojaloop/reporting-hub-bop-trx-ui](https://github.com/mojaloop/reporting-hub-bop-trx-ui)
+### [2.0.7](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v2.0.6...v2.0.7) (2025-09-11)
+
+
+### Bug Fixes
+
+* update webpack config to support different devtool settings based on mode ([#76](https://github.com/mojaloop/reporting-hub-bop-trx-ui/issues/76)) ([e22dcbc](https://github.com/mojaloop/reporting-hub-bop-trx-ui/commit/e22dcbca55f0cf6b8a2152c433ffc171a83c67ba))
+
 ### [2.0.6](https://github.com/mojaloop/reporting-hub-bop-trx-ui/compare/v2.0.5...v2.0.6) (2025-08-19)
 
 
