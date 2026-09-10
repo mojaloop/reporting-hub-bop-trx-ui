@@ -16,5 +16,5 @@
     "declaration": false,
     "allowJs": true
   },
-  "exclude": ["integration_test", "tests", "dist", "node_modules", "webpack.config.js"]
+  "exclude": ["integration_test", "tests", "dist", "node_modules", "webpack.config.js", "authz"]
 }
